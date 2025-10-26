@@ -76,7 +76,7 @@ jobs:
           </script>
           </head><body>" >> $INDEX
           echo "<h1>📚 Tavlenotater og prøver</h1>" >> $INDEX
-
+          echo "<p>Her finner du notater fra undervisningen</p>" >> $INDEX
           list_dir() {
             local dir="$1"
             echo "<ul>" >> $INDEX
