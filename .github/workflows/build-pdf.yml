@@ -1,4 +1,4 @@
-name: Build and Deploy LaTeX PDFs with PSTricks
+name: Build and Deploy LaTeX PDFs with PSTricks + Index
 
 on:
   push:
@@ -36,7 +36,12 @@ jobs:
           while read file; do
             echo "🧩 Building $file ..."
             base=$(basename "$file" .tex)
-            outdir="pdfs/$(dirname "$file" | sed 's|^\./||')"
+            dir=$(dirname "$file")
+            if [ "$dir" = "." ]; then
+              outdir="pdfs"
+            else
+              outdir="pdfs/$dir"
+            fi
             mkdir -p "$outdir"
 
             # Compile using latex -> dvips -> ps2pdf
@@ -49,12 +54,51 @@ jobs:
         run: |
           find pdfs -type f \( -name "*.aux" -o -name "*.log" -o -name "*.out" -o -name "*.fls" -o -name "*.fdb_latexmk" -o -name "*.dvi" -o -name "*.ps" \) -delete
 
-      - name: List generated PDFs
+      - name: Generate foldable index.html
         run: |
-          echo "📂 PDFs ready for deploy:"
-          find pdfs -type f -name "*.pdf"
+          INDEX="pdfs/index.html"
+          echo "<!DOCTYPE html><html lang='no'><head><meta charset='utf-8'><title>PDF Oversikt</title>" > $INDEX
+          echo "<style>
+          body { font-family: Arial, sans-serif; margin: 2em; background: #f4f6f8; }
+          h1 { color: #2c3e50; }
+          ul { list-style-type: none; padding-left: 1em; }
+          li { margin: 0.2em 0; }
+          .folder { font-weight: bold; cursor: pointer; }
+          .file a { text-decoration: none; color: #2c3e50; }
+          .file a:hover { text-decoration: underline; color: #e74c3c; }
+          .hidden { display: none; }
+          </style>
+          <script>
+          function toggle(event) {
+            const next = event.nextElementSibling;
+            if(next) next.classList.toggle('hidden');
+          }
+          </script>
+          </head><body>" >> $INDEX
+          echo "<h1>📚 Tavlenotater og prøver</h1>" >> $INDEX
 
-      - name: Deploy PDFs to gh-pages
+          list_dir() {
+            local dir="$1"
+            echo "<ul>" >> $INDEX
+            for f in "$dir"/*; do
+              if [ -d "$f" ]; then
+                name=$(basename "$f")
+                echo "<li class='folder' onclick='toggle(this)'>📁 $name</li>" >> $INDEX
+                echo "<ul class='hidden'>" >> $INDEX
+                list_dir "$f"
+                echo "</ul>" >> $INDEX
+              elif [[ "$f" == *.pdf ]]; then
+                rel="${f#pdfs/}"
+                echo "<li class='file'>📘 <a href='$rel' target='_blank'>$rel</a></li>" >> $INDEX
+              fi
+            done
+            echo "</ul>" >> $INDEX
+          }
+
+          list_dir pdfs
+          echo "</body></html>" >> $INDEX
+
+      - name: Deploy PDFs and index.html to gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
