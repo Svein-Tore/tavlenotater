@@ -6,7 +6,9 @@
 \usepackage{booktabs}
 \usepackage{geometry}
 \geometry{margin=2.5cm}
-
+\usepackage{auto-pst-pdf}
+\usepackage{pstricks}
+\usepackage{pst-labo}
 
 \title{Forsøk: Loven om bevaring av masse}
 \author{Naturfagrapport}
@@ -73,7 +75,30 @@ Massetapet er neglisjerbart, og forsøket bekrefter loven om bevaring av masse.
   \item Eddik ($\approx 50$ g)
   \item Natron ($\approx 4$ g)
 \end{itemize}
+\psset{unit=1cm}
+\begin{pspicture}(-6,-2)(3,4)
+\psset{unit=0.5}
+  % Ballong (sirkel)
+  \pscircle[linecolor=red!80!black,
+            fillstyle=solid,
+            fillcolor=red!40](0,3){2}
 
+  % Utløp ballong
+  \pspolygon[fillstyle=solid,fillcolor=red!40,
+             linecolor=red!70!black]
+             (-0.4,0.5)(-0.1,1.0)(0.4,1.0)(0.6,0.5)
+\rput(0,-1.05){             
+\pstTubeEssais[glassType=erlen,niveauLiquide1=80]
+}
+\psline[linecolor=red!40, linewidth=1.4pt](-0.1,1)(0.35 ,1)
+  % Tekst (CO_2)
+\rput(0,3){\large CO$_2$}
+%Ring i ballong som fester rundt kolbe
+\rput(0.056,0.42){  
+\psellipse[linecolor=red!80!black,fillcolor=red!40,fillstyle=solid,linewidth=0.6pt](0.7,0.3)  
+\psline[linecolor=red!40, linewidth=1.4pt](-0.4,0.1)(0.4 ,0.1)
+}
+\end{pspicture}
 \subsection*{Fremgangsmåte}
 \begin{enumerate}
   \item Vei flaske med eddik og ballong montert: $m_\text{før}$.
