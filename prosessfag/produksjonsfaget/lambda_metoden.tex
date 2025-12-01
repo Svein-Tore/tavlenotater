@@ -1,4 +1,4 @@
-\documentclass[a4paper,12pt]{article}
+\documentclass{minmal}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath, amssymb}
 \usepackage{graphicx}
@@ -13,32 +13,84 @@
 \title{Lambda-metoden ($\lambda$-tuning) for PI-regulatorer}
 
 \date{\today}
+\author{Svein-Tore Narvestad}
  
 \begin{document}
 \maketitle
 \section{Introduksjon}
-Lambda-metoden (også kjent som Skogestad-metoden) er en modellbasert metode for å stille inn PI- og PID-regulatorer. Metoden er spesielt nyttig for industrielle prosesser som kan beskrives som førsteordenssystemer med tidsforsinkelse (FOPDT), for eksempel tankanlegg, temperatur- eller nivåprosesser.
- 
-\section{FOPDT-prosessmodell}
-En prosess kan ofte modelleres som:
-\begin{equation}
-G(s) = \frac{K}{T\cdot s + 1} e^{-L s}
-\end{equation}
-der:
-\begin{itemize}
-    \item $K$ er prosessforsterkningen
-    \item $T$ er tidskonstanten, som beskriver hvor raskt prosessen reagerer etter forsinkelsen
-    \item $L$ er død tid (tidsforsinkelse) fra pådrag til prosessstart
-\end{itemize}
- 
+Når man arbeider med styressystemer i industrien så er det viktig at man har regulatorer med gode regulatorparametre ($K_p$,$T_i$ og $T_d$).  Har man gode parametre kan en regulering se slik ut:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{prosessfag/bilder/optimal_regualtor.png}
+\end{figure}
+\noindent Men om vi har feil parametre så kan det bli veldig feil.  her kan du se et eksempel på det:\nl
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{prosessfag/bilder/regulator_kaos.png}
+\end{figure}
+\noindent Vi har tidligere sett på hvordan vi kan optimalisere en prosess med Ziegler-Nichols metode.  Denne gir goderesultater. Mendet å øke $K_P$ verdien til maan får stående svingninger er neo man sjeldent får til. I hvert fall i virkelige prosessanlegg, som vi skal jobbe med nå.  Et alternativ til denne er Labda metoden. Lambda-metoden (også kjent som Skogestad-metoden) er en modellbasert metode for å stille inn PI- og PID-regulatorer. Metoden er spesielt nyttig for industrielle prosesser som kan beskrives som førsteordens systemer med tidsforsinkelse (FOPDT), for eksempel tankanlegg, temperatur- strømningsmengde- eller nivåprosesser.  Metoden går ut på at man gjør setter regulatoren i manuell.  Så gjør man en endring (manuelt) i pådragsorganet (f.eks 10\%).  Om vi gjør det vil for den regulerte størrelse få en endring veldig likt kurven under:\nl
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=13cm,
+    height=7cm,
+    xlabel={Tid [s]},
+    ylabel={PV},
+    xmin=0, xmax=60,
+    ymin=0, ymax=1.1,
+    grid=both,
+    title={Sprangrespons med L, T og $\Delta PV$},
+]
+
+% --- Parameters ---
+\def\L{4}
+\def\T{14}
+\def\K{1}
+
+% --- FOPDT response curve ---
+\addplot[
+    thick,
+    red,
+    domain=0:60,
+    samples=400,
+]
+{ (x < \L) * 0 + (x >= \L) * (1 - exp(-(x-\L)/\T)) };
+
+% --- Mark L ---
+\addplot[dashed] coordinates {(\L,0) (\L,1)};
+\node[rotate=90, anchor=south] at (axis cs:\L,0.25) {Død tid $L$};
+
+% --- Mark L+T ---
+\pgfmathsetmacro{\LT}{\L + \T}
+\addplot[dashed] coordinates {(\LT,0) (\LT,1)};
+\node[rotate=90, anchor=south] at (axis cs:\LT,0.25) {$L + T$};
+
+% --- 63.2% line ---
+\pgfmathsetmacro{\ytau}{0.632}
+\addplot[dashed] coordinates {(0,\ytau) (60,\ytau)};
+\node[anchor=west] at (axis cs:1,\ytau+0.03) {63.2\% nivå};
+
+% --- ΔPV marking ---
+\addplot[dashed, blue] coordinates {(55,0) (55,1)};
+\node[anchor=west] at (axis cs:48,0.5) {$\Delta PV$};
+\draw[<->]
+    (axis cs:\L,0.5)
+    --
+    (axis cs:\LT,0.5)
+    node[midway, above] {$T$};
+\end{axis}
+
+\end{tikzpicture}
+\end{figure}
+I denne grafen er det flere verdier som er viktige for å finne optimale PID parametre.  Og det er død tiden (L), tidskonstanen (T) og prosessforstrerkningen (K) 
 \section{Fremgangsmåte for Lambda-tuning}
  
-\subsection{1. Identifisering av prosessparametre}
+\subsection{Identifisering av prosessparametre}
 Gjennomfør et sprangforsøk på prosessen:
  
 \begin{enumerate}
-    \item \textbf{Lite sprang:} $ \Delta u_\text{liten} $ (2--3\% av arbeidsområdet) for å teste linearitet, dødsoner og ventilslep.
-    \item \textbf{Stort sprang:} $ \Delta u_\text{stor} $ (5--10\\%) for å måle prosessresponsen og estimere $K$, $T$, og $L$.
+    \item \textbf{Sprangendring:} Du gjør en manuell positiv endring i pådraget $\Delta u$ på 10\%.  Så noterer du hvordan prosessresponsen blir.  Du må altså skrive ned verdien for prosessvariabelen (PV) for hvert sekund til den igjen stabiliserer seg. Styreystemet har mulighet for det.  Så lager du en graf som vist over av verdiene.  Til slutt estimerer du $K$, $T$, og $L$.
 \end{enumerate}
  
 Fra responsen kan du lese av:
@@ -48,7 +100,7 @@ Fra responsen kan du lese av:
     \item \textbf{Prosessforsterkning (K):} $\Delta PV / \Delta u$.
 \end{itemize}
  
-\subsection{2. Valg av lukket sløyfe-tidskonstant ($\lambda$)}
+\subsection{2. Valg av lukket sløyfe-tidskonstant (\texorpdfstring{$\lambda$}{lambda})}
 Velg $\lambda$ avhengig av ønsket robusthet og respons:
 \[
 \lambda = L \quad (\text{rask respons})
