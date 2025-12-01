@@ -1,89 +1,81 @@
-name: Build LaTeX and deploy PDFs
+name: Build LaTeX PDFs and Deploy
 
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        persist-credentials: true
 
-      - name: Install TeX Live
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y texlive-full
+    - name: Install TeX Live and dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y texlive-full dvipng ps2pdf texlive-latex-extra
 
-      # Finn alle .tex-filer
-      - name: Find all .tex files
-        run: |
-          find . -type f -name "*.tex" > texfiles.txt
-          echo "Found:"
-          cat texfiles.txt
+    - name: Find all .tex files
+      run: find . -name "*.tex" > texfiles.txt
 
-      # Bygg PDF med pdflatex + shell-escape
-      - name: Build PDFs
-        run: |
-          while read file; do
-            echo "🧩 Building $file ..."
-            dir=$(dirname "$file")
-            base=$(basename "$file" .tex)
+    - name: Build PDFs preserving folder structure
+      run: |
+        while read file; do
+          echo "🧩 Building $file ..."
+          base=$(basename "$file" .tex)
+          dir=$(dirname "$file")
+          if [ "$dir" = "." ]; then
+            outdir="pdfs"
+          else
             outdir="pdfs/$dir"
-            mkdir -p "$outdir"
+          fi
+          mkdir -p "$outdir"
 
-            # PDFLATEX TWICE
-            pdflatex -shell-escape -interaction=nonstopmode -halt-on-error \
-              -output-directory="$outdir" "$file" || exit 1
-            pdflatex -shell-escape -interaction=nonstopmode -halt-on-error \
-              -output-directory="$outdir" "$file" || exit 1
-          done < texfiles.txt
+          # Compile using pdflatex
+          pdflatex -interaction=nonstopmode -output-directory="$outdir" "$file"
+        done < texfiles.txt
 
-      # Generer stilfull foldbar HTML-index
-      - name: Generate stylish HTML index
-        run: |
-          echo "<!DOCTYPE html>
-          <html lang='en'>
-          <head>
-            <meta charset='UTF-8'>
-            <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-            <title>LaTeX PDFs</title>
-            <style>
-              body { font-family: Arial, sans-serif; padding: 1em; background: #f9f9f9; }
-              h1 { text-align: center; }
-              details { margin: 0.5em 0; }
-              summary { font-weight: bold; cursor: pointer; }
-              ul { list-style: none; padding-left: 1em; }
-              li { margin: 0.3em 0; }
-              a { text-decoration: none; color: #0366d6; }
-              a:hover { text-decoration: underline; }
-            </style>
-          </head>
-          <body>
-            <h1>LaTeX PDFs</h1>" > index.html
+    - name: Generate dynamic index.html
+      run: |
+        echo "<!DOCTYPE html>
+        <html lang='no'>
+        <head>
+        <meta charset='UTF-8'>
+        <title>PDF Arkiv</title>
+        <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        details { margin-left: 20px; }
+        a { text-decoration: none; color: #0066cc; }
+        a:hover { text-decoration: underline; }
+        </style>
+        </head>
+        <body>
+        <h1>PDF Arkiv</h1>" > pdfs/index.html
 
-          find pdfs -type d ! -path "pdfs" | sort | while read dir; do
-            folder=$(basename "$dir")
-            echo "<details><summary>📁 $folder</summary><ul>" >> index.html
-
-            find "$dir" -type f -name "*.pdf" | sort | while read pdf; do
-              fname=$(basename "$pdf")
-              echo "<li>📄 <a href=\"$pdf\" download>$fname</a></li>" >> index.html
+        find pdfs -type d | while read dir; do
+          rel=$(realpath --relative-to=pdfs "$dir")
+          if [ "$rel" != "." ]; then
+            echo "<details><summary>$rel</summary><ul>" >> pdfs/index.html
+            find "$dir" -maxdepth 1 -type f -name "*.pdf" | while read f; do
+              name=$(basename "$f")
+              echo "<li><a href=\"$rel/$name\" target=\"_blank\">$name</a></li>" >> pdfs/index.html
             done
+            echo "</ul></details>" >> pdfs/index.html
+          fi
+        done
 
-            echo "</ul></details>" >> index.html
-          done
+        echo "</body></html>" >> pdfs/index.html
 
-          echo "</body></html>" >> index.html
-
-      # Deploy til gh-pages med PAT
-      - name: Deploy to gh-pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          personal_token: ${{ secrets.PAT_TOKEN }}
-          publish_dir: .
-          publish_branch: gh-pages
-          keep_files: false
+    - name: Deploy to gh-pages
+      uses: peaceiris/actions-gh-pages@v6
+      with:
+        personal_token: ${{ secrets.PAT_TOKEN }}
+        publish_dir: ./pdfs
+        publish_branch: gh-pages
+        keep_files: true
