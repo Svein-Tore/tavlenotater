@@ -38,7 +38,7 @@ jobs:
           mkdir -p "$outdir"
 
           # Compile using pdflatex
-          pdflatex -interaction=nonstopmode -output-directory="$outdir" "$file"
+          pdflatex -shell-escape -interaction=nonstopmode -output-directory="$outdir" "$file"
         done < texfiles.txt
 
     - name: Generate dynamic index.html
