@@ -18,53 +18,72 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y texlive-full
 
-      # FINN ALLE TEX-FILER
+      # Finn alle .tex-filer
       - name: Find all .tex files
         run: |
           find . -type f -name "*.tex" > texfiles.txt
           echo "Found:"
           cat texfiles.txt
 
-      # BYGG PDF MED PDFLATEX + SHELL ESCAPE
-      - name: Build PDFs with pdflatex (supports PSTricks via auto-pst-pdf)
+      # Bygg PDF med pdflatex + shell-escape
+      - name: Build PDFs
         run: |
           while read file; do
             echo "🧩 Building $file ..."
             dir=$(dirname "$file")
             base=$(basename "$file" .tex)
-
-            # Output directory mirrors repo structure under pdfs/
             outdir="pdfs/$dir"
             mkdir -p "$outdir"
 
-            # RUN PDFLATEX TWICE WITH SHELL-ESCAPE
+            # PDFLATEX TWICE
             pdflatex -shell-escape -interaction=nonstopmode -halt-on-error \
               -output-directory="$outdir" "$file" || exit 1
-
             pdflatex -shell-escape -interaction=nonstopmode -halt-on-error \
               -output-directory="$outdir" "$file" || exit 1
-
           done < texfiles.txt
 
-      # GENERER index.html
-      - name: Generate HTML index
+      # Generer stilfull foldbar HTML-index
+      - name: Generate stylish HTML index
         run: |
-          echo "<!DOCTYPE html><html><head><meta charset='UTF-8'><title>PDFs</title></head><body>" > index.html
-          echo "<h1>LaTeX PDF Files</h1>" >> index.html
-          echo "<ul>" >> index.html
+          echo "<!DOCTYPE html>
+          <html lang='en'>
+          <head>
+            <meta charset='UTF-8'>
+            <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+            <title>LaTeX PDFs</title>
+            <style>
+              body { font-family: Arial, sans-serif; padding: 1em; background: #f9f9f9; }
+              h1 { text-align: center; }
+              details { margin: 0.5em 0; }
+              summary { font-weight: bold; cursor: pointer; }
+              ul { list-style: none; padding-left: 1em; }
+              li { margin: 0.3em 0; }
+              a { text-decoration: none; color: #0366d6; }
+              a:hover { text-decoration: underline; }
+            </style>
+          </head>
+          <body>
+            <h1>LaTeX PDFs</h1>" > index.html
 
-          find pdfs -type f -name "*.pdf" | sort | while read pdf; do
-            clean=$(echo "$pdf" | sed 's|pdfs/||')
-            echo "<li><a href=\"$clean\" download>$clean</a></li>" >> index.html
+          find pdfs -type d ! -path "pdfs" | sort | while read dir; do
+            folder=$(basename "$dir")
+            echo "<details><summary>📁 $folder</summary><ul>" >> index.html
+
+            find "$dir" -type f -name "*.pdf" | sort | while read pdf; do
+              fname=$(basename "$pdf")
+              echo "<li>📄 <a href=\"$pdf\" download>$fname</a></li>" >> index.html
+            done
+
+            echo "</ul></details>" >> index.html
           done
 
-          echo "</ul></body></html>" >> index.html
+          echo "</body></html>" >> index.html
 
-      # DEPLOY TIL GH-PAGES
+      # Deploy til gh-pages med PAT
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          personal_token: ${{ secrets.PAT_TOKEN }}
           publish_dir: .
           publish_branch: gh-pages
           keep_files: false
