@@ -1,0 +1,195 @@
+% --------------------------------------------
+% minekommandoer.sty
+% En enkel LaTeX-pakke for prøver/oppgaver
+% Inkluderer: \nl (linjeskift) og \setfontsize (fontstørrelse)
+% --------------------------------------------
+\ProvidesPackage{minekommandoer}[2025/11/16 v1.0 Enkel prøvepakke]
+\RequirePackage{tikz}
+\RequirePackage{anyfontsize}
+\RequirePackage{xparse}
+\RequirePackage{float}
+% Fontstørrelse kommando  \setfontsize{16pt}
+\newcommand{\setfontsize}[1]{%
+  \fontsize{#1}{1.2#1}\selectfont
+}
+\newcommand{\awH}{1.008g/mol}   % Hydrogen
+%kommando for å få ny linje  \nl[ant linjer]
+\newcommand{\nl}[1][1]{%
+  \par % sørger for vertikal modus
+  \vspace*{#1\baselineskip}%
+  \noindent % unngå at neste linje får innrykk
+}
+% Overstyr standard \newpage og \clearpage
+\let\orignewpage\newpage
+\renewcommand{\newpage}{\orignewpage\noindent}
+
+\let\origclearpage\clearpage
+\renewcommand{\clearpage}{\origclearpage\noindent}
+% Kommando med valgfritt argument for myLength, default = 4
+\newcommand{\stempel}[1][4]{%
+\begin{tikzpicture}
+    \pgfmathsetmacro{\myLength}{#1}
+    \draw (2,2)--(8,2)--(8,0)--(2,0);
+    \draw (\myLength,0)--(\myLength+0.5,0)--(\myLength+0.5,2)--(\myLength,2)--(\myLength,0);
+    \draw [line width=2pt] (\myLength,0)--(\myLength+0.5,0.5);
+    \draw [line width=2pt] (\myLength,0.5)--(\myLength+0.5,1);
+    \draw [line width=2pt] (\myLength,1)--(\myLength+0.5,1.5);
+    \draw [line width=2pt] (\myLength,1.5)--(\myLength+0.5,2);
+    \draw [line width=2pt] (\myLength,1)--(\myLength-2.5,1);
+    % Stempel-mønster linjer
+    \draw [line width=1pt] (\myLength-2,0.7)--(\myLength-1.8,1.3);
+    \draw [line width=1pt] (\myLength-1.8,1.3)--(\myLength-1.6,0.7);
+    \draw [line width=1pt] (\myLength-1.6,0.7)--(\myLength-1.4,1.3);
+    \draw [line width=1pt] (\myLength-1.4,1.3)--(\myLength-1.2,0.7);
+    \draw [line width=1pt] (\myLength-1.2,0.7)--(\myLength-1,1.3);
+    \draw [line width=1pt] (\myLength-1,1.3)--(\myLength-0.8,0.7);
+    \draw [line width=1pt] (\myLength-0.8,0.7)--(\myLength-0.6,1.3);
+    \draw [line width=1pt] (\myLength-0.6,1.3)--(\myLength-0.4,0.7);
+    \draw [line width=1pt] (\myLength-0.4,0.7)--(\myLength-0.2,1.3);
+    \draw [line width=1pt] (\myLength-0.2,1.3)--(\myLength,0.7);
+\end{tikzpicture}%
+}
+%mol trekanten:
+
+\NewDocumentCommand{\trekant}{O{m} O{n} O{Mm}}{%
+\begin{center}
+    \begin{tikzpicture}
+        \draw (0,2.5)--(1.5,0);
+        \draw (1.5,0)--(-1.5,0);
+        \draw (-1.5,0)--(0,2.5);
+        \draw (0,1.0)--(0,0);
+        \draw (-0.9,1)--(0.9,1);
+        \node at (0,1.5) {\LARGE #1};
+        \node at (-0.6,0.4) {\LARGE #2};
+        \node at (0.6,0.4) {\LARGE #3};
+    \end{tikzpicture}    
+\end{center}%
+}
+%avekter:
+% --- avekter, ingen mellomrom ---
+\newcommand{\Ha}{1,01g/mol}
+\newcommand{\Hea}{4,003g/mol}
+\newcommand{\Lia}{6,94g/mol}
+\newcommand{\Bea}{9,012g/mol}
+\newcommand{\Ba}{10,81g/mol}
+\newcommand{\Ca}{12,00g/mol}
+\newcommand{\Na}{14,01g/mol}
+\newcommand{\Oa}{16,00g/mol}
+\newcommand{\Fa}{18,998g/mol}
+\newcommand{\Nea}{20,18g/mol}
+
+\newcommand{\Naa}{22,99g/mol}
+\newcommand{\Mga}{24,31g/mol}
+\newcommand{\Ala}{26,98g/mol}
+\newcommand{\Sia}{28,09g/mol}
+\newcommand{\Pa}{30,97g/mol}
+\newcommand{\Sa}{32,06g/mol}
+\newcommand{\Cla}{35,45g/mol}
+\newcommand{\Ara}{39,948g/mol}
+
+\newcommand{\Ka}{39,098g/mol}
+\newcommand{\Caa}{40,078g/mol}
+\newcommand{\Sca}{44,956g/mol}
+\newcommand{\Tia}{47,867g/mol}
+\newcommand{\Va}{50,942g/mol}
+\newcommand{\Cra}{51,996g/mol}
+\newcommand{\Mna}{54,938g/mol}
+\newcommand{\Fea}{55,845g/mol}
+\newcommand{\Coa}{58,933g/mol}
+\newcommand{\Nia}{58,693g/mol}
+\newcommand{\Cua}{63,546g/mol}
+\newcommand{\Zna}{65,38g/mol}
+\newcommand{\Gaa}{69,723g/mol}
+\newcommand{\Gea}{72,630g/mol}
+\newcommand{\Asa}{74,922g/mol}
+\newcommand{\Sea}{78,971g/mol}
+\newcommand{\Bra}{79,904g/mol}
+\newcommand{\Kra}{83,798g/mol}
+
+\newcommand{\Rba}{85,468g/mol}
+\newcommand{\Sra}{87,62g/mol}
+\newcommand{\Ya}{88,906g/mol}
+\newcommand{\Zra}{91,224g/mol}
+\newcommand{\Nba}{92,906g/mol}
+\newcommand{\Moa}{95,95g/mol}
+\newcommand{\Tca}{98,00g/mol}
+\newcommand{\Rua}{101,07g/mol}
+\newcommand{\Rha}{102,91g/mol}
+\newcommand{\Pda}{106,42g/mol}
+\newcommand{\Aga}{107,87g/mol}
+\newcommand{\Cda}{112,41g/mol}
+\newcommand{\Ina}{114,82g/mol}
+\newcommand{\Sna}{118,71g/mol}
+\newcommand{\Sba}{121,76g/mol}
+\newcommand{\Tea}{127,60g/mol}
+\newcommand{\Ia}{126,90g/mol}
+\newcommand{\Xea}{131,29g/mol}
+
+\newcommand{\Csa}{132.91g/mol}
+\newcommand{\Baa}{137.33g/mol}
+\newcommand{\Laa}{138.91g/mol}
+\newcommand{\Cea}{140.12g/mol}
+\newcommand{\Pra}{140.91g/mol}
+\newcommand{\Nda}{144.24g/mol}
+\newcommand{\Pma}{145g/mol}
+\newcommand{\Sma}{150.36g/mol}
+\newcommand{\Eua}{151.96g/mol}
+\newcommand{\Gda}{157.25g/mol}
+\newcommand{\Tba}{158.93g/mol}
+\newcommand{\Dya}{162.50g/mol}
+\newcommand{\Hoa}{164.93g/mol}
+\newcommand{\Era}{167.26g/mol}
+\newcommand{\Tma}{168.93g/mol}
+\newcommand{\Yba}{173.05g/mol}
+\newcommand{\Lua}{174.97g/mol}
+
+\newcommand{\Hfa}{178,49g/mol}
+\newcommand{\Taa}{180,95g/mol}
+\newcommand{\Wa}{183,84g/mol}
+\newcommand{\Rea}{186,21g/mol}
+\newcommand{\Osa}{190,23g/mol}
+\newcommand{\Ira}{192,22g/mol}
+\newcommand{\Pta}{195,08g/mol}
+\newcommand{\Aua}{196,97g/mol}
+\newcommand{\Hga}{200,59g/mol}
+\newcommand{\Tla}{204,38g/mol}
+\newcommand{\Pba}{207,2g/mol}
+\newcommand{\Bia}{208,98g/mol}
+\newcommand{\Poa}{209,00g/mol}
+\newcommand{\Ata}{210,00g/mol}
+\newcommand{\Rna}{222,00g/mol}
+
+\newcommand{\Fra}{223g/mol}
+\newcommand{\Raa}{226g/mol}
+\newcommand{\Aca}{227g/mol}
+\newcommand{\Tha}{232,04g/mol}
+\newcommand{\Paa}{231,04g/mol}
+\newcommand{\Ua}{238,03g/mol}
+\newcommand{\Npa}{237g/mol}
+\newcommand{\Pua}{244g/mol}
+\newcommand{\Ama}{243g/mol}
+\newcommand{\Cma}{247g/mol}
+\newcommand{\Bka}{247g/mol}
+\newcommand{\Cfa}{251g/mol}
+\newcommand{\Esa}{252g/mol}
+\newcommand{\Fma}{257g/mol}
+\newcommand{\Mda}{258g/mol}
+\newcommand{\Noa}{259g/mol}
+\newcommand{\Lra}{266g/mol}
+
+\newcommand{\Rfa}{267g/mol}
+\newcommand{\Dba}{268g/mol}
+\newcommand{\Sga}{269g/mol}
+\newcommand{\Bha}{270g/mol}
+\newcommand{\Hsa}{277g/mol}
+\newcommand{\Mta}{278g/mol}
+\newcommand{\Dsa}{281g/mol}
+\newcommand{\Rga}{282g/mol}
+\newcommand{\Cna}{285g/mol}
+\newcommand{\Nha}{286g/mol}
+\newcommand{\Fla}{289g/mol}
+\newcommand{\Mca}{290g/mol}
+\newcommand{\Lva}{293g/mol}
+\newcommand{\Tsa}{294g/mol}
+\newcommand{\Oga}{294g/mol}
+% Her kan du legge til flere kommandoer senere
