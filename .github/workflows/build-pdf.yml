@@ -1,13 +1,9 @@
-name: Build and Deploy LaTeX PDFs with PSTricks + Index
+name: Build LaTeX and deploy PDFs
 
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-permissions:
-  contents: write
+  workflow_dispatch:
 
 jobs:
   build:
@@ -16,94 +12,59 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          persist-credentials: true
 
-      - name: Install LaTeX with PSTricks
+      - name: Install TeX Live
         run: |
           sudo apt-get update
-          sudo apt-get install -y texlive-full dvipng ghostscript
+          sudo apt-get install -y texlive-full
 
+      # FINN ALLE TEX-FILER
       - name: Find all .tex files
         run: |
-          echo "🔍 Searching for .tex files..."
           find . -type f -name "*.tex" > texfiles.txt
+          echo "Found:"
           cat texfiles.txt
 
-      - name: Build PDFs with PSTricks
+      # BYGG PDF MED PDFLATEX + SHELL ESCAPE
+      - name: Build PDFs with pdflatex (supports PSTricks via auto-pst-pdf)
         run: |
-          mkdir -p pdfs
           while read file; do
             echo "🧩 Building $file ..."
-            base=$(basename "$file" .tex)
             dir=$(dirname "$file")
-            if [ "$dir" = "." ]; then
-              outdir="pdfs"
-            else
-              outdir="pdfs/$dir"
-            fi
+            base=$(basename "$file" .tex)
+
+            # Output directory mirrors repo structure under pdfs/
+            outdir="pdfs/$dir"
             mkdir -p "$outdir"
 
-            # Compile using latex -> dvips -> ps2pdf
-            latex -interaction=nonstopmode -output-directory="$outdir" "$file"
-            dvips -o "$outdir/$base.ps" "$outdir/$base.dvi"
-            ps2pdf "$outdir/$base.ps" "$outdir/$base.pdf"
+            # RUN PDFLATEX TWICE WITH SHELL-ESCAPE
+            pdflatex -shell-escape -interaction=nonstopmode -halt-on-error \
+              -output-directory="$outdir" "$file" || exit 1
+
+            pdflatex -shell-escape -interaction=nonstopmode -halt-on-error \
+              -output-directory="$outdir" "$file" || exit 1
+
           done < texfiles.txt
 
-      - name: Clean auxiliary files
+      # GENERER index.html
+      - name: Generate HTML index
         run: |
-          find pdfs -type f \( -name "*.aux" -o -name "*.log" -o -name "*.out" -o -name "*.fls" -o -name "*.fdb_latexmk" -o -name "*.dvi" -o -name "*.ps" \) -delete
+          echo "<!DOCTYPE html><html><head><meta charset='UTF-8'><title>PDFs</title></head><body>" > index.html
+          echo "<h1>LaTeX PDF Files</h1>" >> index.html
+          echo "<ul>" >> index.html
 
-      - name: Generate foldable index.html
-        run: |
-          INDEX="pdfs/index.html"
-          echo "<!DOCTYPE html><html lang='no'><head><meta charset='utf-8'><title>PDF Oversikt</title>" > $INDEX
-          echo "<style>
-          body { font-family: Arial, sans-serif; margin: 2em; background: #f4f6f8; }
-          h1 { color: #2c3e50; }
-          ul { list-style-type: none; padding-left: 1em; }
-          li { margin: 0.2em 0; }
-          .folder { font-weight: bold; cursor: pointer; }
-          .file a { text-decoration: none; color: #2c3e50; }
-          .file a:hover { text-decoration: underline; color: #e74c3c; }
-          .hidden { display: none; }
-          </style>
-          <script>
-          function toggle(event) {
-            const next = event.nextElementSibling;
-            if(next) next.classList.toggle('hidden');
-          }
-          </script>
-          </head><body>" >> $INDEX
-          echo "<h1>📚 Tavlenotater og prøver</h1>" >> $INDEX
-          echo "<p>Her finner du notater fra undervisningen</p>" >> $INDEX
-          list_dir() {
-            local dir="$1"
-            echo "<ul>" >> $INDEX
-            for f in "$dir"/*; do
-              if [ -d "$f" ]; then
-                name=$(basename "$f")
-                echo "<li class='folder' onclick='toggle(this)'>📁 $name</li>" >> $INDEX
-                echo "<ul class='hidden'>" >> $INDEX
-                list_dir "$f"
-                echo "</ul>" >> $INDEX
-              elif [[ "$f" == *.pdf ]]; then
-                rel="${f#pdfs/}"
-                echo "<li class='file'>📘 <a href='$rel' target='_blank'>$rel</a></li>" >> $INDEX
-              fi
-            done
-            echo "</ul>" >> $INDEX
-          }
+          find pdfs -type f -name "*.pdf" | sort | while read pdf; do
+            clean=$(echo "$pdf" | sed 's|pdfs/||')
+            echo "<li><a href=\"$clean\" download>$clean</a></li>" >> index.html
+          done
 
-          list_dir pdfs
-          echo "</body></html>" >> $INDEX
+          echo "</ul></body></html>" >> index.html
 
-      - name: Deploy PDFs and index.html to gh-pages
+      # DEPLOY TIL GH-PAGES
+      - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
           publish_branch: gh-pages
-          publish_dir: pdfs
-          keep_files: true
-          user_name: github-actions
-          user_email: github-actions@github.com
+          keep_files: false
