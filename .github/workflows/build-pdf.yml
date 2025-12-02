@@ -1,4 +1,4 @@
-name: Build LaTeX PDFs with PSTricks (Safe + Tree)
+name: Build LaTeX PDFs with PSTricks (Robust & Fancy HTML)
 
 on:
   push:
@@ -29,14 +29,11 @@ jobs:
             dvipng ghostscript
 
       - name: Find all .tex files
-        run: |
-          find . -name "*.tex" > texfiles.txt
+        run: find . -name "*.tex" > texfiles.txt
 
-      - name: Build PDFs with error handling
+      - name: Build PDFs (continue on error)
         run: |
           mkdir -p pdfs
-          echo "" > failed.txt
-
           while read file; do
             echo "🧩 Building $file ..."
             base=$(basename "$file" .tex)
@@ -48,16 +45,18 @@ jobs:
             fi
             mkdir -p "$outdir"
 
-            # Compile with pdflatex + PSTricks
+            # Build with pdflatex and PSTricks
             if ! pdflatex -shell-escape -interaction=nonstopmode -output-directory="$outdir" "$file"; then
-              echo "$file" >> failed.txt
+              echo "❌ $file failed"
+              touch "$outdir/$base.pdf.failed"
             fi
 
-            # Remove intermediate files
-            rm -f "$outdir/$base.aux" "$outdir/$base.log" "$outdir/$base.out" "$outdir/$base.toc" "$outdir/$base.dvi" "$outdir/$base.ps"
+            # Clean intermediate files
+            rm -f "$outdir/$base.aux" "$outdir/$base.log" "$outdir/$base.out" \
+                  "$outdir/$base.toc" "$outdir/$base.dvi" "$outdir/$base.ps"
           done < texfiles.txt
 
-      - name: Generate index.html with folder tree
+      - name: Generate fancy index.html with folder tree and icons
         run: |
           echo '<!DOCTYPE html>
           <html>
@@ -65,7 +64,7 @@ jobs:
             <meta charset="UTF-8">
             <title>PDFs</title>
             <style>
-              ul { list-style-type: none; }
+              ul { list-style-type: none; margin-left: 1em; }
               li { margin: 0.3em 0; }
               .failed { color: red; font-weight: bold; }
             </style>
@@ -79,15 +78,15 @@ jobs:
             for f in "$path"/*; do
               if [ -d "$f" ]; then
                 name=$(basename "$f")
-                echo "<li><strong>$name</strong></li>" >> pdfs/index.html
+                echo "<li>📁 <strong>$name</strong></li>" >> pdfs/index.html
                 generate_list "$f"
               elif [[ "$f" == *.pdf ]]; then
                 rel=${f#pdfs/}
                 name=$(basename "$f")
-                if grep -Fxq "${f%.pdf}.tex" failed.txt; then
-                  echo "<li class='failed'>$name (FAILED)</li>" >> pdfs/index.html
+                if [ -f "${f}.failed" ]; then
+                  echo "<li>📄 <span class=\"failed\">$name (failed)</span></li>" >> pdfs/index.html
                 else
-                  echo "<li><a href='$rel'>$name</a></li>" >> pdfs/index.html
+                  echo "<li>📄 <a href='$rel'>$name</a></li>" >> pdfs/index.html
                 fi
               fi
             done
