@@ -6,12 +6,18 @@
 \ProvidesPackage{minekommandoer}[2025/11/16 v1.0 Enkel prøvepakke]
 \RequirePackage{tikz}
 \RequirePackage{anyfontsize}
+\RequirePackage{pstricks}
 \RequirePackage{xparse}
 \RequirePackage{float}
+\RequirePackage{auto-pst-pdf}
 % Fontstørrelse kommando  \setfontsize{16pt}
 \newcommand{\setfontsize}[1]{%
   \fontsize{#1}{1.2#1}\selectfont
 }
+\ifdefined\HCode\else
+  \usepackage{pstricks}
+  \usepackage{auto-pst-pdf}
+\fi
 \newcommand{\awH}{1.008g/mol}   % Hydrogen
 %kommando for å få ny linje  \nl[ant linjer]
 \newcommand{\nl}[1][1]{%
