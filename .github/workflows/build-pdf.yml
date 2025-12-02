@@ -1,4 +1,4 @@
-name: Build LaTeX PDFs with PSTricks and Fancy HTML
+name: Build LaTeX PDFs with PSTricks (Safe + Tree)
 
 on:
   push:
@@ -22,7 +22,6 @@ jobs:
             texlive-latex-recommended \
             texlive-latex-extra \
             texlive-fonts-recommended \
-            texlive-fonts-extra \
             texlive-pictures \
             texlive-science \
             texlive-pstricks \
@@ -33,9 +32,11 @@ jobs:
         run: |
           find . -name "*.tex" > texfiles.txt
 
-      - name: Build PDFs
+      - name: Build PDFs with error handling
         run: |
           mkdir -p pdfs
+          echo "" > failed.txt
+
           while read file; do
             echo "🧩 Building $file ..."
             base=$(basename "$file" .tex)
@@ -47,14 +48,16 @@ jobs:
             fi
             mkdir -p "$outdir"
 
-            # Compile using pdflatex + auto-pst-pdf
-            pdflatex -shell-escape -interaction=nonstopmode -output-directory="$outdir" "$file"
+            # Compile with pdflatex + PSTricks
+            if ! pdflatex -shell-escape -interaction=nonstopmode -output-directory="$outdir" "$file"; then
+              echo "$file" >> failed.txt
+            fi
 
-            # Clean intermediate files
+            # Remove intermediate files
             rm -f "$outdir/$base.aux" "$outdir/$base.log" "$outdir/$base.out" "$outdir/$base.toc" "$outdir/$base.dvi" "$outdir/$base.ps"
           done < texfiles.txt
 
-      - name: Generate fancy index.html with folder tree
+      - name: Generate index.html with folder tree
         run: |
           echo '<!DOCTYPE html>
           <html>
@@ -62,20 +65,10 @@ jobs:
             <meta charset="UTF-8">
             <title>PDFs</title>
             <style>
-              ul { list-style-type: none; padding-left: 1em; }
+              ul { list-style-type: none; }
               li { margin: 0.3em 0; }
-              .folder { cursor: pointer; font-weight: bold; }
-              .nested { display: none; }
-              .active { display: block; }
+              .failed { color: red; font-weight: bold; }
             </style>
-            <script>
-              function toggleFolder(event) {
-                var next = event.nextElementSibling;
-                if (next) {
-                  next.classList.toggle("active");
-                }
-              }
-            </script>
           </head>
           <body>
             <h1>PDFs</h1>' > pdfs/index.html
@@ -86,14 +79,16 @@ jobs:
             for f in "$path"/*; do
               if [ -d "$f" ]; then
                 name=$(basename "$f")
-                echo "<li><span class=\"folder\" onclick=\"toggleFolder(this)\">📁 $name</span>" >> pdfs/index.html
-                echo "<ul class=\"nested\">" >> pdfs/index.html
+                echo "<li><strong>$name</strong></li>" >> pdfs/index.html
                 generate_list "$f"
-                echo "</ul></li>" >> pdfs/index.html
               elif [[ "$f" == *.pdf ]]; then
                 rel=${f#pdfs/}
                 name=$(basename "$f")
-                echo "<li>📄 <a href=\"$rel\" target=\"_blank\">$name</a></li>" >> pdfs/index.html
+                if grep -Fxq "${f%.pdf}.tex" failed.txt; then
+                  echo "<li class='failed'>$name (FAILED)</li>" >> pdfs/index.html
+                else
+                  echo "<li><a href='$rel'>$name</a></li>" >> pdfs/index.html
+                fi
               fi
             done
             echo "</ul>" >> pdfs/index.html
