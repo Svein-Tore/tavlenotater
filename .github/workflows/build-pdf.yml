@@ -1,124 +1,117 @@
-name: Build PDFs and Deploy
+name: Build LaTeX PDFs and Deploy
 
 on:
   push:
     branches:
       - main
 
+permissions:
+  contents: write
+
 jobs:
+
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
+    - name: Checkout repo
       uses: actions/checkout@v3
 
-    - name: Install TeX
+    - name: Install TeX Live + needed tools
       run: |
         sudo apt-get update
-        sudo apt-get install -y texlive texlive-latex-extra texlive-pictures texlive-fonts-recommended texlive-lang-european ghostscript psutils
+        sudo apt-get install -y texlive-full ghostscript
 
-    - name: Enable shell escape
-      run: echo "export LATEX_OPTS='-shell-escape'" >> $GITHUB_ENV
-
-    - name: Find .tex files
+    - name: Find all .tex files
       run: |
         find . -name "*.tex" > texfiles.txt
-        mkdir -p pdfs
+        echo "Found these TeX files:"
+        cat texfiles.txt
 
-    - name: Build PDFs
+    - name: Build PDFs (latex + dvips + ps2pdf)
       run: |
+        mkdir -p pdfs
         while read file; do
-          echo "Building $file"
+          echo "🧩 Building $file ..."
           base=$(basename "$file" .tex)
           dir=$(dirname "$file")
 
-          outdir="pdfs/$dir"
+          # output folder
+          if [ "$dir" = "." ]; then
+            outdir="pdfs"
+          else
+            outdir="pdfs/$dir"
+          fi
+
           mkdir -p "$outdir"
 
-          latex -interaction=nonstopmode -shell-escape -output-directory="$outdir" "$file"
+          # latex -> dvi
+          latex -shell-escape -interaction=nonstopmode -output-directory="$outdir" "$file"
+
+          # dvips -> ps
           dvips -o "$outdir/$base.ps" "$outdir/$base.dvi"
+
+          # ps2pdf -> pdf
           ps2pdf "$outdir/$base.ps" "$outdir/$base.pdf"
+
         done < texfiles.txt
 
-    - name: Generate dynamic index.html
+
+    - name: Generate automatic index.html
       run: |
-        cat > pdfs/index.html << 'EOF'
-<!DOCTYPE html>
-<html lang="no">
-<head>
-<meta charset="UTF-8">
-<title>Mapper og PDF-filer</title>
-<style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f4; }
-    ul { list-style-type: none; padding-left: 20px; }
-    li { margin: 4px 0; cursor: pointer; }
-    .folder::before { content: "📁 "; }
-    .file::before { content: "📄 "; }
-    .nested { display: none; }
-    .active { display: block; }
-</style>
-</head>
-<body>
-<h1>Mapper og filer</h1>
-<div id="tree">Laster mapper…</div>
+        python3 - << 'PY'
+import os
+import html
 
-<script>
-async function fetchDir(path) {
-    const url = path ? path + "/" : "";
-    const res = await fetch(url);
-    const text = await res.text();
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(text, "text/html");
-    return [...doc.querySelectorAll("a")]
-      .map(a => a.getAttribute("href"))
-      .filter(h => h && h !== "../")
-      .map(h => h.replace(/\/$/, ""));
-}
+root = "pdfs"
 
-async function build(path, parent) {
-    const entries = await fetchDir(path);
-    for (const e of entries) {
-        const full = path ? path + "/" + e : e;
-        const li = document.createElement("li");
+def build_tree(path):
+    entries = []
+    for entry in sorted(os.listdir(path)):
+        full = os.path.join(path, entry)
+        if os.path.isdir(full):
+            entries.append({
+                "type": "dir",
+                "name": entry,
+                "children": build_tree(full)
+            })
+        elif entry.endswith(".pdf"):
+            entries.append({
+                "type": "pdf",
+                "name": entry,
+                "path": full.replace("\\", "/")
+            })
+    return entries
 
-        if (e.endsWith(".pdf")) {
-            li.classList.add("file");
-            const a = document.createElement("a");
-            a.href = full;
-            a.textContent = e;
-            a.target = "_blank";
-            li.appendChild(a);
-            parent.appendChild(li);
-        } else {
-            li.classList.add("folder");
-            li.textContent = e;
-            const nested = document.createElement("ul");
-            nested.classList.add("nested");
-            li.appendChild(nested);
-            li.onclick = async (ev) => {
-                ev.stopPropagation();
-                if (nested.childElementCount === 0) await build(full, nested);
-                nested.classList.toggle("active");
-            };
-            parent.appendChild(li);
-        }
-    }
-}
+def render(tree, indent=0):
+    lines = []
+    for item in tree:
+        if item["type"] == "dir":
+            lines.append(" " * indent + f"<details><summary>{html.escape(item['name'])}</summary>")
+            lines.extend(render(item["children"], indent + 2))
+            lines.append(" " * indent + "</details>")
+        else:
+            url = html.escape(item["path"])
+            text = html.escape(item["name"])
+            lines.append(" " * indent + f'<div><a href="{url}" download>{text}</a></div>')
+    return lines
 
-(async () => {
-    const root = document.createElement("ul");
-    document.getElementById("tree").innerHTML = "";
-    document.getElementById("tree").appendChild(root);
-    await build("", root);
-})();
-</script>
-</body>
-</html>
-EOF
+tree = build_tree(root)
 
-    - name: Deploy to GitHub Pages
+html_out = "<!DOCTYPE html><html><head><meta charset='UTF-8'><title>PDF bibliotek</title></head><body>"
+html_out += "<h1>PDF bibliotek</h1>\n"
+html_out += "\n".join(render(tree))
+html_out += "\n</body></html>"
+
+with open("pdfs/index.html", "w") as f:
+    f.write(html_out)
+
+PY
+
+
+    - name: Deploy to gh-pages
       uses: peaceiris/actions-gh-pages@v3
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        personal_token: ${{ secrets.PAT_TOKEN }}
+        publish_branch: gh-pages
         publish_dir: pdfs
