@@ -39,7 +39,7 @@ jobs:
             fi
             mkdir -p "$outdir"
 
-            # Compile using latex -> dvips -> ps2pdf
+            # Compile using latex -> dvips -> ps2pdf (via Ghostscript)
             latex -shell-escape -interaction=nonstopmode -output-directory="$outdir" "$file"
             dvips -o "$outdir/$base.ps" "$outdir/$base.dvi"
             ps2pdf "$outdir/$base.ps" "$outdir/$base.pdf"
