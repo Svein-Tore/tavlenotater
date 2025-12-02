@@ -40,31 +40,31 @@ jobs:
       # 4. Generate dynamic index.html
       - name: Generate index.html
         run: |
-python3 - <<'PY'
-import os
+          python3 - <<'PY'
+          import os
 
-pdf_root = "pdfs"
-index_file = os.path.join(pdf_root, "index.html")
+          pdf_root = "pdfs"
+          index_file = os.path.join(pdf_root, "index.html")
 
-with open(index_file, "w", encoding="utf-8") as f:
-    f.write("<!DOCTYPE html>\n<html>\n<body>\n<h1>PDF Files</h1>\n<ul>\n")
+          with open(index_file, "w", encoding="utf-8") as f:
+              f.write("<!DOCTYPE html>\n<html>\n<body>\n<h1>PDF Files</h1>\n<ul>\n")
 
-    for root, dirs, files in os.walk(pdf_root):
-        if "index.html" in files:
-            files.remove("index.html")
-        rel_path = os.path.relpath(root, pdf_root)
-        indent = "  " * rel_path.count(os.sep)
-        if rel_path == ".":
-            rel_path = ""
-        else:
-            f.write(f"{indent}<li>{os.path.basename(root)}<ul>\n")
-        for file in files:
-            f.write(f'{indent}  <li><a href="{os.path.join(rel_path, file)}">{file}</a></li>\n')
-        if rel_path != "":
-            f.write(f"{indent}</ul></li>\n")
+              for root, dirs, files in os.walk(pdf_root):
+                  if "index.html" in files:
+                      files.remove("index.html")
+                  rel_path = os.path.relpath(root, pdf_root)
+                  indent = "  " * rel_path.count(os.sep)
+                  if rel_path == ".":
+                      rel_path = ""
+                  else:
+                      f.write(f"{indent}<li>{os.path.basename(root)}<ul>\n")
+                  for file in files:
+                      f.write(f'{indent}  <li><a href="{os.path.join(rel_path, file)}">{file}</a></li>\n')
+                  if rel_path != "":
+                      f.write(f"{indent}</ul></li>\n")
 
-    f.write("</ul>\n</body>\n</html>\n")
-PY
+              f.write("</ul>\n</body>\n</html>\n")
+          PY
 
       # 5. Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
