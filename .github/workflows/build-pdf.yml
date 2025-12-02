@@ -1,4 +1,4 @@
-name: Build LaTeX PDFs with PSTricks
+name: Build LaTeX PDFs with PSTricks and Fancy HTML
 
 on:
   push:
@@ -22,6 +22,7 @@ jobs:
             texlive-latex-recommended \
             texlive-latex-extra \
             texlive-fonts-recommended \
+            texlive-fonts-extra \
             texlive-pictures \
             texlive-science \
             texlive-pstricks \
@@ -31,7 +32,8 @@ jobs:
       - name: Find all .tex files
         run: |
           find . -name "*.tex" > texfiles.txt
-      - name: Build PDFs with pdflatex + auto-pst-pdf
+
+      - name: Build PDFs
         run: |
           mkdir -p pdfs
           while read file; do
@@ -45,14 +47,14 @@ jobs:
             fi
             mkdir -p "$outdir"
 
-            # Compile using pdflatex with auto-pst-pdf
+            # Compile using pdflatex + auto-pst-pdf
             pdflatex -shell-escape -interaction=nonstopmode -output-directory="$outdir" "$file"
 
-            # Remove intermediate files
+            # Clean intermediate files
             rm -f "$outdir/$base.aux" "$outdir/$base.log" "$outdir/$base.out" "$outdir/$base.toc" "$outdir/$base.dvi" "$outdir/$base.ps"
           done < texfiles.txt
 
-      - name: Generate index.html with folder tree
+      - name: Generate fancy index.html with folder tree
         run: |
           echo '<!DOCTYPE html>
           <html>
@@ -60,9 +62,20 @@ jobs:
             <meta charset="UTF-8">
             <title>PDFs</title>
             <style>
-              ul { list-style-type: none; }
+              ul { list-style-type: none; padding-left: 1em; }
               li { margin: 0.3em 0; }
+              .folder { cursor: pointer; font-weight: bold; }
+              .nested { display: none; }
+              .active { display: block; }
             </style>
+            <script>
+              function toggleFolder(event) {
+                var next = event.nextElementSibling;
+                if (next) {
+                  next.classList.toggle("active");
+                }
+              }
+            </script>
           </head>
           <body>
             <h1>PDFs</h1>' > pdfs/index.html
@@ -73,12 +86,14 @@ jobs:
             for f in "$path"/*; do
               if [ -d "$f" ]; then
                 name=$(basename "$f")
-                echo "<li><strong>$name</strong></li>" >> pdfs/index.html
+                echo "<li><span class=\"folder\" onclick=\"toggleFolder(this)\">📁 $name</span>" >> pdfs/index.html
+                echo "<ul class=\"nested\">" >> pdfs/index.html
                 generate_list "$f"
+                echo "</ul></li>" >> pdfs/index.html
               elif [[ "$f" == *.pdf ]]; then
                 rel=${f#pdfs/}
                 name=$(basename "$f")
-                echo "<li><a href='$rel'>$name</a></li>" >> pdfs/index.html
+                echo "<li>📄 <a href=\"$rel\" target=\"_blank\">$name</a></li>" >> pdfs/index.html
               fi
             done
             echo "</ul>" >> pdfs/index.html
