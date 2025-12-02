@@ -17,15 +17,16 @@ jobs:
       - name: Install LaTeX + PSTricks packages
         run: |
           sudo apt-get update
-          sudo apt-get install -y \
-            texlive-latex-base \
-            texlive-latex-recommended \
-            texlive-latex-extra \
-            texlive-fonts-recommended \
-            texlive-pictures \
-            texlive-science \
-            texlive-pstricks \
-            dvipng ghostscript
+         sudo apt-get install -y \
+         texlive-latex-base \
+         texlive-latex-recommended \
+         texlive-latex-extra \
+         texlive-fonts-recommended \
+         texlive-pictures \
+         texlive-science \
+         texlive-pstricks \
+         texlive-publishers \
+         dvipng ghostscript
 
       - name: Find all .tex files
         run: |
