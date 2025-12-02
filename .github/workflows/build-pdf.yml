@@ -1,4 +1,4 @@
-name: Test Python Heredoc Workflow
+name: Minimal Test
 
 on:
   push:
@@ -8,13 +8,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Minimal Python heredoc test
-        run: |
-python3 - <<'PY'
-print("Hei fra Python!")
-PY
+      - name: Print Hello
+        run: echo "Hei fra GitHub Actions!"
