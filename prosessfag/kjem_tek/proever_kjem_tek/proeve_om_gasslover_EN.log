@@ -2,8 +2,8 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloade
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
-**./prosessfag/kjem_tek/notater_gasslover.tex
-(./prosessfag/kjem_tek/notater_gasslover.tex
+**./prosessfag/kjem_tek/proever_kjem_tek/proeve_om_gasslover_EN.tex
+(./prosessfag/kjem_tek/proever_kjem_tek/proeve_om_gasslover_EN.tex
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
 (/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
@@ -515,48 +515,89 @@ File: pgflibraryarrows.meta.code.tex 2023-01-15 v3.1.10 (3.1.10)
 )
 Package: chemfig 2023/12/28 v1.66 Draw molecule with an easy syntax (CT)
 )
-Package translations Info: No language package found. I am going to use `englis
-h' as default language. on input line 13.
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tik
+zlibrarycalc.code.tex
+File: tikzlibrarycalc.code.tex 2023-01-15 v3.1.10 (3.1.10)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/babel/babel.sty
+Package: babel 2024/01/07 v24.1 The Babel package
+\babel@savecnt=\count318
+\U@D=\dimen281
+\l@unhyphenated=\language89
 
+(/usr/share/texlive/texmf-dist/tex/generic/babel/txtbabel.def)
+\bbl@readstream=\read3
+\bbl@dirlevel=\count319
+
+(/usr/share/texlive/texmf-dist/tex/generic/babel-english/english.ldf
+Language: english 2017/06/06 v3.3r English support from the babel system
+Package babel Info: Hyphen rules for 'canadian' set to \l@english
+(babel)             (\language0). Reported on input line 102.
+Package babel Info: Hyphen rules for 'australian' set to \l@ukenglish
+(babel)             (\language39). Reported on input line 105.
+Package babel Info: Hyphen rules for 'newzealand' set to \l@ukenglish
+(babel)             (\language39). Reported on input line 108.
+))
+(/usr/share/texlive/texmf-dist/tex/generic/babel/locale/en/babel-english.tex
+Package babel Info: Importing font and identification data for english
+(babel)             from babel-en.ini. Reported on input line 11.
+)
 (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2024-01-04 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count318
+\l__color_backend_stack_int=\count320
 \l__pdf_internal_box=\box78
 )
-No file notater_gasslover.aux.
-\openout1 = `notater_gasslover.aux'.
+No file proeve_om_gasslover_EN.aux.
+\openout1 = `proeve_om_gasslover_EN.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count319
-\scratchdimen=\dimen281
+\scratchcounter=\count321
+\scratchdimen=\dimen282
 \scratchbox=\box79
-\nofMPsegments=\count320
-\nofMParguments=\count321
+\nofMPsegments=\count322
+\nofMParguments=\count323
 \everyMPshowfont=\toks38
-\MPscratchCnt=\count322
-\MPscratchDim=\dimen282
-\MPnumerator=\count323
-\makeMPintoPDFobject=\count324
+\MPscratchCnt=\count324
+\MPscratchDim=\dimen283
+\MPnumerator=\count325
+\makeMPintoPDFobject=\count326
 \everyMPtoPDFconversion=\toks39
 ) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
+
+(/usr/share/texlive/texmf-dist/tex/latex/grfext/grfext.sty
+Package: grfext 2019/12/03 v1.3 Manage graphics extensions (HO)
+
+(/usr/share/texlive/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty
+Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
+))
+(/usr/share/texlive/texmf-dist/tex/latex/kvoptions/kvoptions.sty
+Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
+
+(/usr/share/texlive/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty
+Package: kvsetkeys 2022-10-05 v1.19 Key value parser (HO)
+))
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 85.
+Package grfext Info: Graphics extension search list:
+(grfext)             [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPE
+G,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 504.
 
 (/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
@@ -603,305 +644,161 @@ File: translations-basic-dictionary-english.trsl (english translation file `tra
 nslations-basic-dictionary')
 )
 Package translations Info: loading dictionary `translations-basic-dictionary' f
-or `english'. on input line 13.
+or `english'. on input line 11.
 
-Underfull \hbox (badness 10000) in paragraph at lines 21--28
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 21--28
+Underfull \hbox (badness 10000) in paragraph at lines 15--22
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 21--28
+Underfull \hbox (badness 10000) in paragraph at lines 15--22
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 29--30
+Underfull \hbox (badness 10000) in paragraph at lines 15--22
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 29--30
+Underfull \hbox (badness 10000) in paragraph at lines 15--22
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 15--22
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 15--22
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 15--22
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 45--46
 
  []
 
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 30--69
+Underfull \hbox (badness 10000) in paragraph at lines 47--48
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 30--69
+Underfull \hbox (badness 10000) in paragraph at lines 47--48
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 30--69
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 30--69
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 30--69
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 70--71
+Underfull \hbox (badness 10000) in paragraph at lines 47--48
 
  []
 
 [2]
-Underfull \hbox (badness 10000) in paragraph at lines 85--104
+Underfull \hbox (badness 10000) in paragraph at lines 96--107
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 85--104
+Underfull \hbox (badness 10000) in paragraph at lines 96--107
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 96--107
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 96--107
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 96--107
 
  []
 
 [3]
-Underfull \hbox (badness 10000) in paragraph at lines 107--108
+Underfull \hbox (badness 10000) in paragraph at lines 108--110
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 111--112
+Underfull \hbox (badness 10000) in paragraph at lines 108--110
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 108--110
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 110--114
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 124--125
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 124--125
 
  []
 
 [4]
-Underfull \hbox (badness 10000) in paragraph at lines 114--116
+Underfull \hbox (badness 10000) in paragraph at lines 139--140
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 120--172
+Underfull \hbox (badness 10000) in paragraph at lines 139--140
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 120--172
+Underfull \hbox (badness 10000) in paragraph at lines 140--144
 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 120--172
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 120--172
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 120--172
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 120--172
-
- []
-
-[5]
-Underfull \hbox (badness 10000) in paragraph at lines 173--189
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 173--189
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 173--189
-
- []
-
-[6]
-Underfull \hbox (badness 10000) in paragraph at lines 189--207
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 208--210
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 208--210
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 208--210
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 216--217
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 218--219
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 226--228
-
- []
-
-[7]
-Underfull \hbox (badness 10000) in paragraph at lines 228--258
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 228--258
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 228--258
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 228--258
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 258--260
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 258--260
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 260--264
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 260--264
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 260--264
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 264--267
-
- []
-
-[8]
-Underfull \hbox (badness 10000) in paragraph at lines 267--270
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 267--270
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 267--270
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 270--272
-
- []
-
-[9]
-Underfull \hbox (badness 10000) in paragraph at lines 300--302
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 326--348
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 326--348
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 326--348
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 326--348
-
- []
-
-[10]
-Underfull \hbox (badness 10000) in paragraph at lines 349--350
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 350--352
-
- []
-
-[11] (pdfs/./prosessfag/kjem_tek/notater_gasslover.aux)
+[5] (pdfs/./prosessfag/kjem_tek/proever_kjem_tek/proeve_om_gasslover_EN.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
  ) 
 Here is how much of TeX's memory you used:
- 18694 strings out of 474222
- 416863 string characters out of 5748733
- 1935975 words of memory out of 5000000
- 40702 multiletter control sequences out of 15000+600000
- 561786 words of font info for 49 fonts, out of 8000000 for 9000
+ 19826 strings out of 474222
+ 438198 string characters out of 5748733
+ 1928975 words of memory out of 5000000
+ 41799 multiletter control sequences out of 15000+600000
+ 563150 words of font info for 54 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,9n,93p,468b,760s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,7n,93p,490b,573s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texli
-ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/f
-onts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/typ
-e1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
-lic/amsfonts/cm/cmsy8.pfb>
-Output written on pdfs/./prosessfag/kjem_tek/notater_gasslover.pdf (11 pages, 1
-06033 bytes).
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texl
+ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmsy8.pfb>
+Output written on pdfs/./prosessfag/kjem_tek/proever_kjem_tek/proeve_om_gasslov
+er_EN.pdf (5 pages, 94744 bytes).
 PDF statistics:
- 83 PDF objects out of 1000 (max. 8388607)
- 53 compressed objects within 1 object stream
+ 63 PDF objects out of 1000 (max. 8388607)
+ 39 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)
 

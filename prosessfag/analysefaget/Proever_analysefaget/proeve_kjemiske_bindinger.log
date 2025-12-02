@@ -2,8 +2,8 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloade
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
-**./prosessfag/kjem_tek/notater_gasslover.tex
-(./prosessfag/kjem_tek/notater_gasslover.tex
+**./prosessfag/analysefaget/Proever_analysefaget/proeve_kjemiske_bindinger.tex
+(./prosessfag/analysefaget/Proever_analysefaget/proeve_kjemiske_bindinger.tex
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
 (/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
@@ -47,6 +47,7 @@ File: pdftex.def 2022/09/22 v1.2b Graphics/color driver for pdftex
 \Gin@req@height=\dimen141
 \Gin@req@width=\dimen142
 )
+(/usr/share/texlive/texmf-dist/tex/generic/chemfig/chemfig.sty
 (/usr/share/texlive/texmf-dist/tex/latex/pgf/frontendlayer/tikz.sty
 (/usr/share/texlive/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty
 (/usr/share/texlive/texmf-dist/tex/latex/pgf/utilities/pgfrcs.sty
@@ -331,160 +332,6 @@ File: pgfmodulematrix.code.tex 2023-01-15 v3.1.10 (3.1.10)
 zlibrarytopaths.code.tex
 File: tikzlibrarytopaths.code.tex 2023-01-15 v3.1.10 (3.1.10)
 )))
-(/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
-Package: geometry 2020/01/02 v5.9 Page Geometry
-
-(/usr/share/texlive/texmf-dist/tex/generic/iftex/ifvtex.sty
-Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
-
-(/usr/share/texlive/texmf-dist/tex/generic/iftex/iftex.sty
-Package: iftex 2022/02/03 v1.0f TeX engine tests
-))
-\Gm@cnth=\count282
-\Gm@cntv=\count283
-\c@Gm@tempcnt=\count284
-\Gm@bindingoffset=\dimen193
-\Gm@wd@mp=\dimen194
-\Gm@odd@mp=\dimen195
-\Gm@even@mp=\dimen196
-\Gm@layoutwidth=\dimen197
-\Gm@layoutheight=\dimen198
-\Gm@layouthoffset=\dimen199
-\Gm@layoutvoffset=\dimen256
-\Gm@dimlist=\toks30
-)
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
-Package: amsmath 2023/05/13 v2.17o AMS math features
-\@mathmargin=\skip50
-
-For additional information on amsmath, use the `?' option.
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
-Package: amstext 2021/08/26 v2.01 AMS text
-
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty
-File: amsgen.sty 1999/11/30 v2.0 generic functions
-\@emptytoks=\toks31
-\ex@=\dimen257
-))
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty
-Package: amsbsy 1999/11/29 v1.2d Bold Symbols
-\pmbraise@=\dimen258
-)
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty
-Package: amsopn 2022/04/08 v2.04 operator names
-)
-\inf@bad=\count285
-LaTeX Info: Redefining \frac on input line 234.
-\uproot@=\count286
-\leftroot@=\count287
-LaTeX Info: Redefining \overline on input line 399.
-LaTeX Info: Redefining \colon on input line 410.
-\classnum@=\count288
-\DOTSCASE@=\count289
-LaTeX Info: Redefining \ldots on input line 496.
-LaTeX Info: Redefining \dots on input line 499.
-LaTeX Info: Redefining \cdots on input line 620.
-\Mathstrutbox@=\box62
-\strutbox@=\box63
-LaTeX Info: Redefining \big on input line 722.
-LaTeX Info: Redefining \Big on input line 723.
-LaTeX Info: Redefining \bigg on input line 724.
-LaTeX Info: Redefining \Bigg on input line 725.
-\big@size=\dimen259
-LaTeX Font Info:    Redeclaring font encoding OML on input line 743.
-LaTeX Font Info:    Redeclaring font encoding OMS on input line 744.
-\macc@depth=\count290
-LaTeX Info: Redefining \bmod on input line 905.
-LaTeX Info: Redefining \pmod on input line 910.
-LaTeX Info: Redefining \smash on input line 940.
-LaTeX Info: Redefining \relbar on input line 970.
-LaTeX Info: Redefining \Relbar on input line 971.
-\c@MaxMatrixCols=\count291
-\dotsspace@=\muskip16
-\c@parentequation=\count292
-\dspbrk@lvl=\count293
-\tag@help=\toks32
-\row@=\count294
-\column@=\count295
-\maxfields@=\count296
-\andhelp@=\toks33
-\eqnshift@=\dimen260
-\alignsep@=\dimen261
-\tagshift@=\dimen262
-\tagwidth@=\dimen263
-\totwidth@=\dimen264
-\lineht@=\dimen265
-\@envbody=\toks34
-\multlinegap=\skip51
-\multlinetaggap=\skip52
-\mathdisplay@stack=\toks35
-LaTeX Info: Redefining \[ on input line 2953.
-LaTeX Info: Redefining \] on input line 2954.
-)
-(/usr/share/texlive/texmf-dist/tex/latex/siunitx/siunitx.sty
-Package: siunitx 2024-01-25 v3.3.10 A comprehensive (SI) units package
-\l__siunitx_number_uncert_offset_int=\count297
-\l__siunitx_number_exponent_fixed_int=\count298
-\l__siunitx_number_min_decimal_int=\count299
-\l__siunitx_number_min_integer_int=\count300
-\l__siunitx_number_round_precision_int=\count301
-\l__siunitx_number_lower_threshold_int=\count302
-\l__siunitx_number_upper_threshold_int=\count303
-\l__siunitx_number_group_first_int=\count304
-\l__siunitx_number_group_size_int=\count305
-\l__siunitx_number_group_minimum_int=\count306
-\l__siunitx_angle_tmp_dim=\dimen266
-\l__siunitx_angle_marker_box=\box64
-\l__siunitx_angle_unit_box=\box65
-\l__siunitx_compound_count_int=\count307
-
-(/usr/share/texlive/texmf-dist/tex/latex/translations/translations.sty
-Package: translations 2022/02/05 v1.12 internationalization of LaTeX2e packages
- (CN)
-
-(/usr/share/texlive/texmf-dist/tex/latex/etoolbox/etoolbox.sty
-Package: etoolbox 2020/10/05 v2.5k e-TeX tools for LaTeX (JAW)
-\etb@tempcnta=\count308
-)
-(/usr/share/texlive/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
-Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO
-)
-
-(/usr/share/texlive/texmf-dist/tex/generic/infwarerr/infwarerr.sty
-Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
-)
-(/usr/share/texlive/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
-Package: ltxcmds 2023-12-04 v1.26 LaTeX kernel commands for general use (HO)
-)
-Package pdftexcmds Info: \pdf@primitive is available.
-Package pdftexcmds Info: \pdf@ifprimitive is available.
-Package pdftexcmds Info: \pdfdraftmode found.
-))
-\l__siunitx_table_tmp_box=\box66
-\l__siunitx_table_tmp_dim=\dimen267
-\l__siunitx_table_column_width_dim=\dimen268
-\l__siunitx_table_integer_box=\box67
-\l__siunitx_table_decimal_box=\box68
-\l__siunitx_table_uncert_box=\box69
-\l__siunitx_table_before_box=\box70
-\l__siunitx_table_after_box=\box71
-\l__siunitx_table_before_dim=\dimen269
-\l__siunitx_table_carry_dim=\dimen270
-\l__siunitx_unit_tmp_int=\count309
-\l__siunitx_unit_position_int=\count310
-\l__siunitx_unit_total_int=\count311
-
-(/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty
-Package: array 2023/10/16 v2.5g Tabular extension package (FMi)
-\col@sep=\dimen271
-\ar@mcellbox=\box72
-\extrarowheight=\dimen272
-\NC@list=\toks36
-\extratabsurround=\skip53
-\backup@length=\skip54
-\ar@cellbox=\box73
-))
-(/usr/share/texlive/texmf-dist/tex/generic/chemfig/chemfig.sty
 (/usr/share/texlive/texmf-dist/tex/generic/chemfig/chemfig.tex
 (/usr/share/texlive/texmf-dist/tex/generic/simplekv/simplekv.tex
 Package: simplekv 2023/10/02 v0.2c Simple keyval package (CT)
@@ -492,67 +339,66 @@ Package: simplekv 2023/10/02 v0.2c Simple keyval package (CT)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/libraries/pgflibraryarrows.meta.
 code.tex
 File: pgflibraryarrows.meta.code.tex 2023-01-15 v3.1.10 (3.1.10)
-\pgfarrowinset=\dimen273
-\pgfarrowlength=\dimen274
-\pgfarrowwidth=\dimen275
-\pgfarrowlinewidth=\dimen276
+\pgfarrowinset=\dimen193
+\pgfarrowlength=\dimen194
+\pgfarrowwidth=\dimen195
+\pgfarrowlinewidth=\dimen196
 )
-\CF_cnt_atomgroup=\count312
-\CF_cnt_group=\count313
-\CF_cnt_atom=\count314
-\CF_cnt_cycle=\count315
-\CF_cnt_cyclebonds=\count316
-\CF_cnt_compound=\count317
-\CF_dim=\dimen277
-\CF_turnangle=\dimen278
-\CF_arrowsize=\dimen279
-\CF_zero=\dimen280
-\CF_box=\box74
-\CF_boxstuff=\box75
-\CF_testbox=\box76
-\CF_chargebox=\box77
-\CF_substtoks=\toks37
+\CF_cnt_atomgroup=\count282
+\CF_cnt_group=\count283
+\CF_cnt_atom=\count284
+\CF_cnt_cycle=\count285
+\CF_cnt_cyclebonds=\count286
+\CF_cnt_compound=\count287
+\CF_dim=\dimen197
+\CF_turnangle=\dimen198
+\CF_arrowsize=\dimen199
+\CF_zero=\dimen256
+\CF_box=\box62
+\CF_boxstuff=\box63
+\CF_testbox=\box64
+\CF_chargebox=\box65
+\CF_substtoks=\toks30
 )
 Package: chemfig 2023/12/28 v1.66 Draw molecule with an easy syntax (CT)
+) (/usr/share/texlive/texmf-dist/tex/latex/lewis/lewis.sty
+Package: lewis 2006/05/22 v0.1 Draw Lewis Structures
 )
-Package translations Info: No language package found. I am going to use `englis
-h' as default language. on input line 13.
-
 (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2024-01-04 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count318
-\l__pdf_internal_box=\box78
+\l__color_backend_stack_int=\count288
+\l__pdf_internal_box=\box66
 )
-No file notater_gasslover.aux.
-\openout1 = `notater_gasslover.aux'.
+No file proeve_kjemiske_bindinger.aux.
+\openout1 = `proeve_kjemiske_bindinger.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count319
-\scratchdimen=\dimen281
-\scratchbox=\box79
-\nofMPsegments=\count320
-\nofMParguments=\count321
-\everyMPshowfont=\toks38
-\MPscratchCnt=\count322
-\MPscratchDim=\dimen282
-\MPnumerator=\count323
-\makeMPintoPDFobject=\count324
-\everyMPtoPDFconversion=\toks39
+\scratchcounter=\count289
+\scratchdimen=\dimen257
+\scratchbox=\box67
+\nofMPsegments=\count290
+\nofMParguments=\count291
+\everyMPshowfont=\toks31
+\MPscratchCnt=\count292
+\MPscratchDim=\dimen258
+\MPnumerator=\count293
+\makeMPintoPDFobject=\count294
+\everyMPtoPDFconversion=\toks32
 ) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
@@ -562,316 +408,149 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-*geometry* driver: auto-detecting
-*geometry* detected driver: pdftex
-*geometry* verbose mode - [ preamble ] result:
-* driver: pdftex
-* paper: a4paper
-* layout: <same size as paper>
-* layoutoffset:(h,v)=(0.0pt,0.0pt)
-* modes: 
-* h-part:(L,W,R)=(56.9055pt, 512.14963pt, 28.45274pt)
-* v-part:(T,H,B)=(101.40665pt, 591.5302pt, 152.11pt)
-* \paperwidth=597.50787pt
-* \paperheight=845.04684pt
-* \textwidth=512.14963pt
-* \textheight=591.5302pt
-* \oddsidemargin=-15.36449pt
-* \evensidemargin=-15.36449pt
-* \topmargin=-7.86334pt
-* \headheight=12.0pt
-* \headsep=25.0pt
-* \topskip=12.0pt
-* \footskip=30.0pt
-* \marginparwidth=35.0pt
-* \marginparsep=10.0pt
-* \columnsep=10.0pt
-* \skip\footins=10.8pt plus 4.0pt minus 2.0pt
-* \hoffset=0.0pt
-* \voffset=0.0pt
-* \mag=1000
-* \@twocolumnfalse
-* \@twosidefalse
-* \@mparswitchfalse
-* \@reversemarginfalse
-* (1in=72.27pt=25.4mm, 1cm=28.453pt)
-
-
-(/usr/share/texlive/texmf-dist/tex/latex/translations/translations-basic-dictio
-nary-english.trsl
-File: translations-basic-dictionary-english.trsl (english translation file `tra
-nslations-basic-dictionary')
-)
-Package translations Info: loading dictionary `translations-basic-dictionary' f
-or `english'. on input line 13.
-
-Underfull \hbox (badness 10000) in paragraph at lines 21--28
+Underfull \hbox (badness 10000) in paragraph at lines 9--13
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 21--28
+Underfull \hbox (badness 10000) in paragraph at lines 9--13
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 21--28
+Underfull \hbox (badness 10000) in paragraph at lines 9--13
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 29--30
+Overfull \hbox (2.02603pt too wide) in paragraph at lines 9--13
+\OT1/cmr/m/n/12 ne-dover i grup-pene. Grun-nen til at det ^^\ker utover i pe-ri
+-o-dene er at grunnstof-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 9--13
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 29--30
+Underfull \hbox (badness 10000) in paragraph at lines 9--13
 
  []
 
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 30--69
+Underfull \hbox (badness 10000) in paragraph at lines 14--16
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 30--69
+Underfull \hbox (badness 10000) in paragraph at lines 14--16
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 30--69
+Underfull \hbox (badness 10000) in paragraph at lines 14--16
+
+ []
+
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 17.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 17.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 17.
+
+Underfull \hbox (badness 10000) in paragraph at lines 19--24
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 30--69
+Underfull \hbox (badness 10000) in paragraph at lines 19--24
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 30--69
+Underfull \hbox (badness 10000) in paragraph at lines 19--24
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 70--71
+Underfull \hbox (badness 10000) in paragraph at lines 19--24
+
+ []
+
+
+Overfull \hbox (20.1528pt too wide) in paragraph at lines 19--24
+\OT1/cmr/m/n/12 grunnstof-fenE har f^^\lgende verdier for elek-tr-roneg-a-tivit
+eten: E(H)=2,1 E(N)=3,5
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 19--24
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 19--24
 
  []
 
 [2]
-Underfull \hbox (badness 10000) in paragraph at lines 85--104
+Overfull \hbox (41.35771pt too wide) in paragraph at lines 25--36
+[]\OT1/cmr/m/n/12 6. Hvilken bind-ingstype har vi mel-lom moleky-lene i stof-fe
+ne $\OML/cmm/m/it/12 H[]O; NH[]; CO[]; CH[]$
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 25--36
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 85--104
+Underfull \hbox (badness 10000) in paragraph at lines 25--36
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 25--36
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 25--36
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 25--36
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 25--36
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 25--36
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 25--36
 
  []
 
 [3]
-Underfull \hbox (badness 10000) in paragraph at lines 107--108
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 111--112
+Underfull \hbox (badness 10000) in paragraph at lines 55--57
 
  []
 
 [4]
-Underfull \hbox (badness 10000) in paragraph at lines 114--116
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 120--172
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 120--172
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 120--172
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 120--172
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 120--172
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 120--172
-
- []
-
-[5]
-Underfull \hbox (badness 10000) in paragraph at lines 173--189
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 173--189
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 173--189
-
- []
-
-[6]
-Underfull \hbox (badness 10000) in paragraph at lines 189--207
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 208--210
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 208--210
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 208--210
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 216--217
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 218--219
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 226--228
-
- []
-
-[7]
-Underfull \hbox (badness 10000) in paragraph at lines 228--258
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 228--258
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 228--258
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 228--258
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 258--260
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 258--260
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 260--264
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 260--264
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 260--264
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 264--267
-
- []
-
-[8]
-Underfull \hbox (badness 10000) in paragraph at lines 267--270
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 267--270
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 267--270
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 270--272
-
- []
-
-[9]
-Underfull \hbox (badness 10000) in paragraph at lines 300--302
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 326--348
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 326--348
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 326--348
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 326--348
-
- []
-
-[10]
-Underfull \hbox (badness 10000) in paragraph at lines 349--350
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 350--352
-
- []
-
-[11] (pdfs/./prosessfag/kjem_tek/notater_gasslover.aux)
+(pdfs/./prosessfag/analysefaget/Proever_analysefaget/proeve_kjemiske_bindinger.
+aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
@@ -882,26 +561,26 @@ LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
  ) 
 Here is how much of TeX's memory you used:
- 18694 strings out of 474222
- 416863 string characters out of 5748733
- 1935975 words of memory out of 5000000
- 40702 multiletter control sequences out of 15000+600000
- 561786 words of font info for 49 fonts, out of 8000000 for 9000
+ 13186 strings out of 474222
+ 274916 string characters out of 5748733
+ 1939975 words of memory out of 5000000
+ 35249 multiletter control sequences out of 15000+600000
+ 561419 words of font info for 47 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,9n,93p,468b,760s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 99i,18n,107p,1170b,1677s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texli
-ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/f
-onts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/typ
-e1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
-lic/amsfonts/cm/cmsy8.pfb>
-Output written on pdfs/./prosessfag/kjem_tek/notater_gasslover.pdf (11 pages, 1
-06033 bytes).
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texl
+ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmsy8.pfb>
+Output written on pdfs/./prosessfag/analysefaget/Proever_analysefaget/proeve_kj
+emiske_bindinger.pdf (4 pages, 92401 bytes).
 PDF statistics:
- 83 PDF objects out of 1000 (max. 8388607)
- 53 compressed objects within 1 object stream
+ 60 PDF objects out of 1000 (max. 8388607)
+ 37 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)
 
