@@ -1,4 +1,4 @@
-name: Build LaTeX PDFs with safe filenames
+name: Build and deploy LaTeX PDFs
 
 on:
   push:
@@ -11,10 +11,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
+    - name: Checkout repo
       uses: actions/checkout@v3
 
-    - name: Sanitize filenames and directories
+    - name: Install TeX dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y texlive-full dvipng ghostscript psutils
+
+    - name: Sanitize filenames
       run: |
         shopt -s globstar
         sanitize() {
@@ -27,7 +32,7 @@ jobs:
           echo "$name"
         }
 
-        # Rename directories first (deepest first)
+        # Rename directories (deepest first)
         for dir in **/; do
           newdir=$(sanitize "$dir")
           if [[ "$dir" != "$newdir" ]]; then
@@ -35,7 +40,7 @@ jobs:
           fi
         done
 
-        # Then rename files
+        # Rename files
         for file in **/*; do
           if [[ -f "$file" ]]; then
             newfile=$(sanitize "$file")
@@ -45,16 +50,10 @@ jobs:
           fi
         done
 
-    - name: Install TeX dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y texlive-full dvipng ghostscript psutils
-
-    - name: Build PDFs with auto-pst-pdf
+    - name: Build PDFs
       run: |
         mkdir -p pdfs
         while read file; do
-          echo "🧩 Building $file ..."
           base=$(basename "$file" .tex)
           dir=$(dirname "$file")
           if [ "$dir" = "." ]; then
@@ -66,11 +65,14 @@ jobs:
           pdflatex -shell-escape -interaction=nonstopmode -output-directory="$outdir" "$file"
         done < <(find . -name "*.tex")
 
-    - name: Upload PDFs as artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: latex-pdfs
-        path: pdfs/
+    - name: Generate index.html
+      run: |
+        echo "<!DOCTYPE html><html><body><h1>PDFs</h1><ul>" > pdfs/index.html
+        find pdfs -type f -name "*.pdf" | sort | while read f; do
+          rel=${f#pdfs/}
+          echo "<li><a href='$rel'>$rel</a></li>" >> pdfs/index.html
+        done
+        echo "</ul></body></html>" >> pdfs/index.html
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
