@@ -13,24 +13,24 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+
       - name: Install LaTeX + PSTricks packages
         run: |
           sudo apt-get update
-         sudo apt-get install -y \
-         texlive-latex-base \
-         texlive-latex-recommended \
-         texlive-latex-extra \
-         texlive-fonts-recommended \
-         texlive-pictures \
-         texlive-science \
-         texlive-pstricks \
-         texlive-publishers \
-         dvipng ghostscript
+          sudo apt-get install -y \
+            texlive-latex-base \
+            texlive-latex-recommended \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            texlive-pictures \
+            texlive-science \
+            texlive-pstricks \
+            texlive-publishers \
+            dvipng ghostscript
 
       - name: Find all .tex files
         run: |
           find . -name "*.tex" > texfiles.txt
-
       - name: Build PDFs with pdflatex + auto-pst-pdf
         run: |
           mkdir -p pdfs
