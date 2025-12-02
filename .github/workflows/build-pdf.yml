@@ -1,4 +1,4 @@
-name: Build LaTeX PDFs and Deploy with Tree
+name: Build LaTeX PDFs with PSTricks (Clean)
 
 on:
   push:
@@ -14,7 +14,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install LaTeX + PSTricks dependencies
+      - name: Install LaTeX + PSTricks packages
         run: |
           sudo apt-get update
           sudo apt-get install -y \
@@ -30,71 +30,64 @@ jobs:
 
       - name: Find all .tex files
         run: |
-          find prosessfag -type f -name "*.tex" > texfiles.txt
+          find . -name "*.tex" > texfiles.txt
 
-      - name: Build PDFs with PSTricks
+      - name: Build PDFs and clean intermediate files
         run: |
           mkdir -p pdfs
           while read file; do
             echo "🧩 Building $file ..."
             base=$(basename "$file" .tex)
             dir=$(dirname "$file")
-
             if [ "$dir" = "." ]; then
               outdir="pdfs"
             else
               outdir="pdfs/$dir"
             fi
-
             mkdir -p "$outdir"
 
-            latex -shell-escape -interaction=nonstopmode -output-directory="$outdir" "$file"
-            dvips -o "$outdir/$base.ps" "$outdir/$base.dvi"
-            ps2pdf "$outdir/$base.ps" "$outdir/$base.pdf"
+            # Compile with pdflatex + auto-pst-pdf
+            pdflatex -shell-escape -interaction=nonstopmode -output-directory="$outdir" "$file"
 
+            # Remove intermediate files
+            rm -f "$outdir/$base.aux" "$outdir/$base.log" "$outdir/$base.out" "$outdir/$base.toc" "$outdir/$base.dvi" "$outdir/$base.ps"
           done < texfiles.txt
 
       - name: Generate index.html with folder tree
         run: |
-          output="pdfs/index.html"
-
-          cat << 'EOF' > "$output"
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>PDF Tree</title>
-<style>
-  ul { list-style-type: none; }
-  li { margin: 0.3em 0; }
-</style>
-</head>
-<body>
-<h1>PDFs</h1>
-EOF
+          echo '<!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="UTF-8">
+            <title>PDFs</title>
+            <style>
+              ul { list-style-type: none; }
+              li { margin: 0.3em 0; }
+            </style>
+          </head>
+          <body>
+            <h1>PDFs</h1>' > pdfs/index.html
 
           generate_list() {
             local path="$1"
-            echo "<ul>" >> "$output"
-
+            echo "<ul>" >> pdfs/index.html
             for f in "$path"/*; do
               if [ -d "$f" ]; then
                 name=$(basename "$f")
-                echo "<li><strong>$name</strong></li>" >> "$output"
+                echo "<li><strong>$name</strong></li>" >> pdfs/index.html
                 generate_list "$f"
               elif [[ "$f" == *.pdf ]]; then
                 rel=${f#pdfs/}
                 name=$(basename "$f")
-                echo "<li><a href=\"$rel\">$name</a></li>" >> "$output"
+                echo "<li><a href='$rel'>$name</a></li>" >> pdfs/index.html
               fi
             done
-
-            echo "</ul>" >> "$output"
+            echo "</ul>" >> pdfs/index.html
           }
 
           generate_list pdfs
 
-          echo "</body></html>" >> "$output"
+          echo '</body></html>' >> pdfs/index.html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
