@@ -1,11 +1,11 @@
-name: Test Python Heredoc Workflow
+name: Test Workflow
 
 on:
   push:
     branches: [ main ]
 
 jobs:
-  test-python:
+  build:
     runs-on: ubuntu-latest
 
     steps:
