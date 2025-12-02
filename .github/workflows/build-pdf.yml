@@ -2,116 +2,122 @@ name: Build LaTeX PDFs and Deploy
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
 
 permissions:
   contents: write
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
-    - name: Install TeX Live + needed tools
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y texlive-full ghostscript
+      - name: Install TeX Live + tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y texlive-full ghostscript
 
-    - name: Find all .tex files
-      run: |
-        find . -name "*.tex" > texfiles.txt
-        echo "Found these TeX files:"
-        cat texfiles.txt
+      - name: Find all .tex files
+        run: |
+          find . -name "*.tex" > texfiles.txt
+          echo "Found these TeX files:"
+          cat texfiles.txt
 
-    - name: Build PDFs (latex + dvips + ps2pdf)
-      run: |
-        mkdir -p pdfs
-        while read file; do
-          echo "🧩 Building $file ..."
-          base=$(basename "$file" .tex)
-          dir=$(dirname "$file")
+      - name: Build PDFs (pdflatex for images & auto-pst-pdf support)
+        run: |
+          mkdir -p pdfs
+          while read -r file; do
+            echo "Building: $file"
+            dir=$(dirname "$file")
+            base=$(basename "$file" .tex)
+            if [ "$dir" = "." ]; then
+              outdir="pdfs"
+            else
+              outdir="pdfs/$dir"
+            fi
+            mkdir -p "$outdir"
 
-          # output folder
-          if [ "$dir" = "." ]; then
-            outdir="pdfs"
-          else
-            outdir="pdfs/$dir"
-          fi
+            # run pdflatex twice with shell-escape (for auto-pst-pdf)
+            pdflatex -shell-escape -interaction=nonstopmode -halt-on-error -output-directory="$outdir" "$file" || exit 1
+            pdflatex -shell-escape -interaction=nonstopmode -halt-on-error -output-directory="$outdir" "$file" || exit 1
+          done < texfiles.txt
 
-          mkdir -p "$outdir"
+      - name: Generate automatic index.html (Python)
+        run: |
+          python3 - << 'PY'
+          import os
+          import html
 
-          # latex -> dvi
-          latex -shell-escape -interaction=nonstopmode -output-directory="$outdir" "$file"
+          root = "pdfs"
 
-          # dvips -> ps
-          dvips -o "$outdir/$base.ps" "$outdir/$base.dvi"
+          def build_tree(path):
+              entries = []
+              try:
+                  names = sorted(os.listdir(path))
+              except FileNotFoundError:
+                  return entries
+              for name in names:
+                  full = os.path.join(path, name)
+                  if os.path.isdir(full):
+                      entries.append({
+                          "type": "dir",
+                          "name": name,
+                          "children": build_tree(full)
+                      })
+                  elif name.lower().endswith(".pdf"):
+                      entries.append({
+                          "type": "pdf",
+                          "name": name,
+                          "path": full.replace("\\", "/")
+                      })
+              return entries
 
-          # ps2pdf -> pdf
-          ps2pdf "$outdir/$base.ps" "$outdir/$base.pdf"
+          def render(tree):
+              out = []
+              for item in tree:
+                  if item["type"] == "dir":
+                      out.append(f"<details><summary>{html.escape(item['name'])}</summary>")
+                      out.extend(render(item["children"]))
+                      out.append("</details>")
+                  else:
+                      url = html.escape(item["path"])
+                      text = html.escape(item["name"])
+                      out.append(f'<div class="file"><a href="{url}" target="_blank">{text}</a></div>')
+              return out
 
-        done < texfiles.txt
-
-
-    - name: Generate automatic index.html
-      run: |
-        python3 - << 'PY'
-import os
-import html
-
-root = "pdfs"
-
-def build_tree(path):
-    entries = []
-    for entry in sorted(os.listdir(path)):
-        full = os.path.join(path, entry)
-        if os.path.isdir(full):
-            entries.append({
-                "type": "dir",
-                "name": entry,
-                "children": build_tree(full)
-            })
-        elif entry.endswith(".pdf"):
-            entries.append({
-                "type": "pdf",
-                "name": entry,
-                "path": full.replace("\\", "/")
-            })
-    return entries
-
-def render(tree, indent=0):
-    lines = []
-    for item in tree:
-        if item["type"] == "dir":
-            lines.append(" " * indent + f"<details><summary>{html.escape(item['name'])}</summary>")
-            lines.extend(render(item["children"], indent + 2))
-            lines.append(" " * indent + "</details>")
-        else:
-            url = html.escape(item["path"])
-            text = html.escape(item["name"])
-            lines.append(" " * indent + f'<div><a href="{url}" download>{text}</a></div>')
-    return lines
-
-tree = build_tree(root)
-
-html_out = "<!DOCTYPE html><html><head><meta charset='UTF-8'><title>PDF bibliotek</title></head><body>"
-html_out += "<h1>PDF bibliotek</h1>\n"
-html_out += "\n".join(render(tree))
-html_out += "\n</body></html>"
-
-with open("pdfs/index.html", "w") as f:
-    f.write(html_out)
-
+          tree = build_tree(root)
+          html_lines = [
+              "<!DOCTYPE html>",
+              "<html lang='no'>",
+              "<head>",
+              "<meta charset='utf-8'/>",
+              "<meta name='viewport' content='width=device-width,initial-scale=1'/>",
+              "<title>PDF bibliotek</title>",
+              "<style>",
+              "body{font-family:Arial,Helvetica,sans-serif;padding:18px;background:#f7f7f8;color:#222}",
+              "h1{margin-bottom:12px}",
+              "details{margin:6px 0;padding-left:8px}",
+              ".file{margin:4px 0;padding-left:18px}",
+              "a{color:#0366d6;text-decoration:none}",
+              "a:hover{text-decoration:underline}",
+              "</style>",
+              "</head>",
+              "<body>",
+              "<h1>PDF bibliotek</h1>"
+          ]
+          html_lines.extend(render(tree))
+          html_lines.extend(["</body>","</html>"])
+          os.makedirs(root, exist_ok=True)
+          with open(os.path.join(root, "index.html"), "w", encoding="utf-8") as f:
+              f.write("\n".join(html_lines))
 PY
 
-
-    - name: Deploy to gh-pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        personal_token: ${{ secrets.PAT_TOKEN }}
-        publish_branch: gh-pages
-        publish_dir: pdfs
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          personal_token: ${{ secrets.PAT_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: pdfs
