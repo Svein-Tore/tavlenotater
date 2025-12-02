@@ -4,47 +4,70 @@
   <meta charset="UTF-8">
   <title>PDFs</title>
   <style>
-    ul { list-style-type: none; }
+    ul { list-style-type: none; padding-left: 1em; }
     li { margin: 0.3em 0; }
+    .folder { cursor: pointer; font-weight: bold; }
+    .nested { display: none; }
+    .active { display: block; }
   </style>
+  <script>
+    function toggleFolder(event) {
+      var next = event.nextElementSibling;
+      if (next) {
+        next.classList.toggle("active");
+      }
+    }
+  </script>
 </head>
 <body>
   <h1>PDFs</h1>
 <ul>
-<li><a href='main.pdf'>main.pdf</a></li>
-<li><strong>prosessfag</strong></li>
+<li>📄 <a href="main.pdf" target="_blank">main.pdf</a></li>
+<li><span class="folder" onclick="toggleFolder(this)">📁 prosessfag</span>
+<ul class="nested">
 <ul>
-<li><strong>analysefaget</strong></li>
+<li><span class="folder" onclick="toggleFolder(this)">📁 analysefaget</span>
+<ul class="nested">
 <ul>
-<li><strong>Prøver_analysefaget</strong></li>
+<li><span class="folder" onclick="toggleFolder(this)">📁 Prøver_analysefaget</span>
+<ul class="nested">
 <ul>
-<li><a href='prosessfag/analysefaget/Prøver_analysefaget/fortynningsloven.pdf'>fortynningsloven.pdf</a></li>
-<li><a href='prosessfag/analysefaget/Prøver_analysefaget/løsningsforslag_prøve_om_støkiometri.pdf'>løsningsforslag_prøve_om_støkiometri.pdf</a></li>
-<li><a href='prosessfag/analysefaget/Prøver_analysefaget/notater.pdf'>notater.pdf</a></li>
-<li><a href='prosessfag/analysefaget/Prøver_analysefaget/prove_støkiometri.pdf'>prove_støkiometri.pdf</a></li>
-<li><a href='prosessfag/analysefaget/Prøver_analysefaget/prøve kjemiske bindinger.pdf'>prøve kjemiske bindinger.pdf</a></li>
-<li><a href='prosessfag/analysefaget/Prøver_analysefaget/prøve_Støkiometri_2.pdf'>prøve_Støkiometri_2.pdf</a></li>
+<li>📄 <a href="prosessfag/analysefaget/Prøver_analysefaget/fortynningsloven.pdf" target="_blank">fortynningsloven.pdf</a></li>
+<li>📄 <a href="prosessfag/analysefaget/Prøver_analysefaget/løsningsforslag_prøve_om_støkiometri.pdf" target="_blank">løsningsforslag_prøve_om_støkiometri.pdf</a></li>
+<li>📄 <a href="prosessfag/analysefaget/Prøver_analysefaget/notater.pdf" target="_blank">notater.pdf</a></li>
+<li>📄 <a href="prosessfag/analysefaget/Prøver_analysefaget/prove_støkiometri.pdf" target="_blank">prove_støkiometri.pdf</a></li>
+<li>📄 <a href="prosessfag/analysefaget/Prøver_analysefaget/prøve kjemiske bindinger.pdf" target="_blank">prøve kjemiske bindinger.pdf</a></li>
+<li>📄 <a href="prosessfag/analysefaget/Prøver_analysefaget/prøve_Støkiometri_2.pdf" target="_blank">prøve_Støkiometri_2.pdf</a></li>
 </ul>
-<li><a href='prosessfag/analysefaget/forsøk_natron_og_eddiksyre.pdf'>forsøk_natron_og_eddiksyre.pdf</a></li>
-<li><a href='prosessfag/analysefaget/innføring i molbegrepet.pdf'>innføring i molbegrepet.pdf</a></li>
+</ul></li>
+<li>📄 <a href="prosessfag/analysefaget/forsøk_natron_og_eddiksyre.pdf" target="_blank">forsøk_natron_og_eddiksyre.pdf</a></li>
+<li>📄 <a href="prosessfag/analysefaget/innføring i molbegrepet.pdf" target="_blank">innføring i molbegrepet.pdf</a></li>
 </ul>
-<li><strong>kjem_tek</strong></li>
+</ul></li>
+<li><span class="folder" onclick="toggleFolder(this)">📁 kjem_tek</span>
+<ul class="nested">
 <ul>
-<li><a href='prosessfag/kjem_tek/arbeidsoppgave_gasslover.pdf'>arbeidsoppgave_gasslover.pdf</a></li>
-<li><a href='prosessfag/kjem_tek/arebeidsoppgave_2_gasslover.pdf'>arebeidsoppgave_2_gasslover.pdf</a></li>
-<li><a href='prosessfag/kjem_tek/notater_gasslover.pdf'>notater_gasslover.pdf</a></li>
-<li><strong>prøver_kjem_tek</strong></li>
+<li>📄 <a href="prosessfag/kjem_tek/arbeidsoppgave_gasslover.pdf" target="_blank">arbeidsoppgave_gasslover.pdf</a></li>
+<li>📄 <a href="prosessfag/kjem_tek/arebeidsoppgave_2_gasslover.pdf" target="_blank">arebeidsoppgave_2_gasslover.pdf</a></li>
+<li>📄 <a href="prosessfag/kjem_tek/notater_gasslover.pdf" target="_blank">notater_gasslover.pdf</a></li>
+<li><span class="folder" onclick="toggleFolder(this)">📁 prøver_kjem_tek</span>
+<ul class="nested">
 <ul>
-<li><a href='prosessfag/kjem_tek/prøver_kjem_tek/løsningsforslag til prøve om gasslover.pdf'>løsningsforslag til prøve om gasslover.pdf</a></li>
-<li><a href='prosessfag/kjem_tek/prøver_kjem_tek/prøve_om_gasslover.pdf'>prøve_om_gasslover.pdf</a></li>
-<li><a href='prosessfag/kjem_tek/prøver_kjem_tek/prøve_om_gasslover_EN.pdf'>prøve_om_gasslover_EN.pdf</a></li>
+<li>📄 <a href="prosessfag/kjem_tek/prøver_kjem_tek/løsningsforslag til prøve om gasslover.pdf" target="_blank">løsningsforslag til prøve om gasslover.pdf</a></li>
+<li>📄 <a href="prosessfag/kjem_tek/prøver_kjem_tek/prøve_om_gasslover.pdf" target="_blank">prøve_om_gasslover.pdf</a></li>
+<li>📄 <a href="prosessfag/kjem_tek/prøver_kjem_tek/prøve_om_gasslover_EN.pdf" target="_blank">prøve_om_gasslover_EN.pdf</a></li>
 </ul>
+</ul></li>
 </ul>
-<li><strong>produksjonsfaget</strong></li>
+</ul></li>
+<li><span class="folder" onclick="toggleFolder(this)">📁 produksjonsfaget</span>
+<ul class="nested">
 <ul>
-<li><a href='prosessfag/produksjonsfaget/Lambda_ny.pdf'>Lambda_ny.pdf</a></li>
-<li><a href='prosessfag/produksjonsfaget/lambda_metoden.pdf'>lambda_metoden.pdf</a></li>
+<li>📄 <a href="prosessfag/produksjonsfaget/Lambda_ny.pdf" target="_blank">Lambda_ny.pdf</a></li>
+<li>📄 <a href="prosessfag/produksjonsfaget/lambda_metoden.pdf" target="_blank">lambda_metoden.pdf</a></li>
 </ul>
+</ul></li>
 </ul>
+</ul></li>
 </ul>
 </body></html>
