@@ -15,6 +15,6 @@ jobs:
 
       - name: Minimal Python heredoc test
         run: |
-          python3 - <<'PY'
+python3 - <<'PY'
 print("Hei fra Python!")
 PY
