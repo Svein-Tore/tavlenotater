@@ -1,4 +1,4 @@
-name: Build and deploy LaTeX PDFs
+name: Build LaTeX PDFs and Deploy with Tree
 
 on:
   push:
@@ -11,71 +11,79 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Install TeX dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y texlive-full dvipng ghostscript psutils
+      - name: Install LaTeX + PSTricks dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y texlive-latex-base texlive-latex-recommended \
+            texlive-latex-extra texlive-fonts-recommended texlive-pictures \
+            dvipng ps2pdf ghostscript
 
-    - name: Sanitize filenames
-      run: |
-        shopt -s globstar
-        sanitize() {
-          local name="$1"
-          name="${name// /_}"
-          name="${name//æ/ae}"
-          name="${name//ø/oe}"
-          name="${name//å/aa}"
-          name="${name//[^a-zA-Z0-9_./-]/}"
-          echo "$name"
-        }
+      - name: Find all .tex files
+        run: |
+          find . -name "*.tex" > texfiles.txt
 
-        # Rename directories (deepest first)
-        for dir in **/; do
-          newdir=$(sanitize "$dir")
-          if [[ "$dir" != "$newdir" ]]; then
-            mv -v "$dir" "$newdir"
-          fi
-        done
-
-        # Rename files
-        for file in **/*; do
-          if [[ -f "$file" ]]; then
-            newfile=$(sanitize "$file")
-            if [[ "$file" != "$newfile" ]]; then
-              mv -v "$file" "$newfile"
+      - name: Build PDFs with PSTricks
+        run: |
+          mkdir -p pdfs
+          while read file; do
+            echo "🧩 Building $file ..."
+            base=$(basename "$file" .tex)
+            dir=$(dirname "$file")
+            if [ "$dir" = "." ]; then
+              outdir="pdfs"
+            else
+              outdir="pdfs/$dir"
             fi
-          fi
-        done
+            mkdir -p "$outdir"
 
-    - name: Build PDFs
-      run: |
-        mkdir -p pdfs
-        while read file; do
-          base=$(basename "$file" .tex)
-          dir=$(dirname "$file")
-          if [ "$dir" = "." ]; then
-            outdir="pdfs"
-          else
-            outdir="pdfs/$dir"
-          fi
-          mkdir -p "$outdir"
-          pdflatex -shell-escape -interaction=nonstopmode -output-directory="$outdir" "$file"
-        done < <(find . -name "*.tex")
+            # Compile using latex -> dvips -> ps2pdf
+            latex -shell-escape -interaction=nonstopmode -output-directory="$outdir" "$file"
+            dvips -o "$outdir/$base.ps" "$outdir/$base.dvi"
+            ps2pdf "$outdir/$base.ps" "$outdir/$base.pdf"
+          done < texfiles.txt
 
-    - name: Generate index.html
-      run: |
-        echo "<!DOCTYPE html><html><body><h1>PDFs</h1><ul>" > pdfs/index.html
-        find pdfs -type f -name "*.pdf" | sort | while read f; do
-          rel=${f#pdfs/}
-          echo "<li><a href='$rel'>$rel</a></li>" >> pdfs/index.html
-        done
-        echo "</ul></body></html>" >> pdfs/index.html
+      - name: Generate index.html with folder tree
+        run: |
+          echo '<!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="UTF-8">
+            <title>PDFs</title>
+            <style>
+              ul { list-style-type: none; }
+              li { margin: 0.3em 0; }
+            </style>
+          </head>
+          <body>
+            <h1>PDFs</h1>' > pdfs/index.html
 
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.PAT_TOKEN }}
-        publish_dir: ./pdfs
+          generate_list() {
+            local path="$1"
+            echo "<ul>" >> pdfs/index.html
+            for f in "$path"/*; do
+              if [ -d "$f" ]; then
+                name=$(basename "$f")
+                echo "<li><strong>$name</strong></li>" >> pdfs/index.html
+                generate_list "$f"
+              elif [[ "$f" == *.pdf ]]; then
+                rel=${f#pdfs/}
+                name=$(basename "$f")
+                echo "<li><a href='$rel'>$name</a></li>" >> pdfs/index.html
+              fi
+            done
+            echo "</ul>" >> pdfs/index.html
+          }
+
+          generate_list pdfs
+
+          echo '</body></html>' >> pdfs/index.html
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.PAT_TOKEN }}
+          publish_dir: ./pdfs
+          publish_branch: gh-pages
