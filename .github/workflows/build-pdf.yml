@@ -1,4 +1,4 @@
-name: Build LaTeX PDFs with PSTricks (Clean)
+name: Build LaTeX PDFs with PSTricks
 
 on:
   push:
@@ -22,7 +22,6 @@ jobs:
             texlive-latex-recommended \
             texlive-latex-extra \
             texlive-fonts-recommended \
-            texlive-fonts-extra \
             texlive-pictures \
             texlive-science \
             texlive-pstricks \
@@ -32,7 +31,7 @@ jobs:
         run: |
           find . -name "*.tex" > texfiles.txt
 
-      - name: Build PDFs and clean intermediate files
+      - name: Build PDFs with pdflatex + auto-pst-pdf
         run: |
           mkdir -p pdfs
           while read file; do
@@ -46,7 +45,7 @@ jobs:
             fi
             mkdir -p "$outdir"
 
-            # Compile with pdflatex + auto-pst-pdf
+            # Compile using pdflatex with auto-pst-pdf
             pdflatex -shell-escape -interaction=nonstopmode -output-directory="$outdir" "$file"
 
             # Remove intermediate files
