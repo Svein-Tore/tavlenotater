@@ -1,75 +1,79 @@
-name: Build LaTeX PDFs with PSTricks and Deploy
+name: Build LaTeX PDFs with safe filenames
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pages: write
-      id-token: write
 
     steps:
-      # 1. Checkout repository
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      # 2. Install TeX Live + PSTricks dependencies
-      - name: Install TeX Live
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y texlive-full dvipng ghostscript psutils
+    - name: Sanitize filenames and directories
+      run: |
+        shopt -s globstar
+        sanitize() {
+          local name="$1"
+          name="${name// /_}"
+          name="${name//æ/ae}"
+          name="${name//ø/oe}"
+          name="${name//å/aa}"
+          name="${name//[^a-zA-Z0-9_./-]/}"
+          echo "$name"
+        }
 
-      # 3. Build PDFs (with shell-escape for auto-pst-pdf)
-      - name: Build PDFs
-        run: |
-          mkdir -p pdfs
-          for file in $(find . -name "*.tex"); do
-            base=$(basename "$file" .tex)
-            dir=$(dirname "$file")
+        # Rename directories first (deepest first)
+        for dir in **/; do
+          newdir=$(sanitize "$dir")
+          if [[ "$dir" != "$newdir" ]]; then
+            mv -v "$dir" "$newdir"
+          fi
+        done
+
+        # Then rename files
+        for file in **/*; do
+          if [[ -f "$file" ]]; then
+            newfile=$(sanitize "$file")
+            if [[ "$file" != "$newfile" ]]; then
+              mv -v "$file" "$newfile"
+            fi
+          fi
+        done
+
+    - name: Install TeX dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y texlive-full dvipng ghostscript psutils
+
+    - name: Build PDFs with auto-pst-pdf
+      run: |
+        mkdir -p pdfs
+        while read file; do
+          echo "🧩 Building $file ..."
+          base=$(basename "$file" .tex)
+          dir=$(dirname "$file")
+          if [ "$dir" = "." ]; then
+            outdir="pdfs"
+          else
             outdir="pdfs/$dir"
-            mkdir -p "$outdir"
-            # Compile with pdflatex + shell-escape
-            pdflatex -interaction=nonstopmode -shell-escape -output-directory="$outdir" "$file"
-          done
+          fi
+          mkdir -p "$outdir"
+          pdflatex -shell-escape -interaction=nonstopmode -output-directory="$outdir" "$file"
+        done < <(find . -name "*.tex")
 
-      # 4. Generate dynamic index.html
-      - name: Generate index.html
-        run: |
-          python3 - <<'PY'
-          import os
+    - name: Upload PDFs as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: latex-pdfs
+        path: pdfs/
 
-          pdf_root = "pdfs"
-          index_file = os.path.join(pdf_root, "index.html")
-
-          with open(index_file, "w", encoding="utf-8") as f:
-              f.write("<!DOCTYPE html>\n<html>\n<body>\n<h1>PDF Files</h1>\n<ul>\n")
-
-              for root, dirs, files in os.walk(pdf_root):
-                  if "index.html" in files:
-                      files.remove("index.html")
-                  rel_path = os.path.relpath(root, pdf_root)
-                  indent = "  " * rel_path.count(os.sep)
-                  if rel_path == ".":
-                      rel_path = ""
-                  else:
-                      f.write(f"{indent}<li>{os.path.basename(root)}<ul>\n")
-                  for file in files:
-                      f.write(f'{indent}  <li><a href="{os.path.join(rel_path, file)}">{file}</a></li>\n')
-                  if rel_path != "":
-                      f.write(f"{indent}</ul></li>\n")
-
-              f.write("</ul>\n</body>\n</html>\n")
-          PY
-
-      # 5. Deploy to GitHub Pages
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
-          publish_dir: ./pdfs
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.PAT_TOKEN }}
+        publish_dir: ./pdfs
