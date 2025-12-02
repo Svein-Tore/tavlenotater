@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Install TeX Live + tools
@@ -40,7 +40,7 @@ jobs:
             fi
             mkdir -p "$outdir"
 
-            # pdflatex med shell-escape (for PSTricks/auto-pst-pdf)
+            # Compile with pdflatex, shell-escape for PSTricks
             pdflatex -shell-escape -interaction=nonstopmode -halt-on-error -output-directory="$outdir" "$file" || exit 1
             pdflatex -shell-escape -interaction=nonstopmode -halt-on-error -output-directory="$outdir" "$file" || exit 1
           done < texfiles.txt
