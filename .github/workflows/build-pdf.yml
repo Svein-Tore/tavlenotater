@@ -1,98 +1,19 @@
-name: Build LaTeX PDFs and Deploy
+name: Test Python Heredoc Workflow
 
 on:
   push:
     branches: [ main ]
 
-permissions:
-  contents: write
-
 jobs:
-  build:
+  test-python:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install TeX Live + tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y texlive-full ghostscript
-
-      - name: Find all .tex files
-        run: |
-          find . -name "*.tex" > texfiles.txt
-          echo "Found TeX files:"
-          cat texfiles.txt
-
-      - name: Build PDFs
-        run: |
-          mkdir -p pdfs
-          while read -r file; do
-            echo "Building: $file"
-            dir=$(dirname "$file")
-            base=$(basename "$file" .tex)
-            if [ "$dir" = "." ]; then
-              outdir="pdfs"
-            else
-              outdir="pdfs/$dir"
-            fi
-            mkdir -p "$outdir"
-
-            # Compile with pdflatex, shell-escape for PSTricks
-            pdflatex -shell-escape -interaction=nonstopmode -halt-on-error -output-directory="$outdir" "$file" || exit 1
-            pdflatex -shell-escape -interaction=nonstopmode -halt-on-error -output-directory="$outdir" "$file" || exit 1
-          done < texfiles.txt
-
-      - name: Generate dynamic index.html
+      - name: Minimal Python heredoc test
         run: |
           python3 - <<'PY'
-import os, html
-
-root = "pdfs"
-
-def build_tree(path):
-    entries = []
-    for name in sorted(os.listdir(path)):
-        full = os.path.join(path, name)
-        if os.path.isdir(full):
-            entries.append({"type":"dir", "name":name, "children":build_tree(full)})
-        elif name.lower().endswith(".pdf"):
-            entries.append({"type":"pdf","name":name,"path":full.replace("\\","/")})
-    return entries
-
-def render(tree):
-    out = []
-    for item in tree:
-        if item["type"] == "dir":
-            out.append(f"<details><summary>{html.escape(item['name'])}</summary>")
-            out.extend(render(item["children"]))
-            out.append("</details>")
-        else:
-            url = html.escape(item["path"])
-            text = html.escape(item["name"])
-            out.append(f'<div class="file"><a href="{url}" target="_blank">{text}</a></div>')
-    return out
-
-tree = build_tree(root)
-html_lines = [
-    "<!DOCTYPE html>",
-    "<html lang='no'>",
-    "<head><meta charset='utf-8'/><title>PDF bibliotek</title></head>",
-    "<body><h1>PDF bibliotek</h1>"
-]
-html_lines.extend(render(tree))
-html_lines.append("</body></html>")
-
-os.makedirs(root, exist_ok=True)
-with open(os.path.join(root,"index.html"),"w", encoding="utf-8") as f:
-    f.write("\n".join(html_lines))
+print("Hei fra Python!")
 PY
-
-      - name: Deploy to gh-pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          personal_token: ${{ secrets.PAT_TOKEN }}
-          publish_branch: gh-pages
-          publish_dir: pdfs
