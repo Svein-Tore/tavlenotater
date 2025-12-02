@@ -1,8 +1,9 @@
-name: Test Workflow
+name: Test Python Heredoc Workflow
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   build:
