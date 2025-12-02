@@ -1,4 +1,4 @@
-name: Build LaTeX PDFs with PSTricks (Robust & Fancy HTML)
+name: Build LaTeX PDFs and Deploy with Interactive Tree
 
 on:
   push:
@@ -14,7 +14,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install LaTeX + PSTricks packages
+      - name: Install LaTeX + PSTricks dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y \
@@ -22,6 +22,7 @@ jobs:
             texlive-latex-recommended \
             texlive-latex-extra \
             texlive-fonts-recommended \
+            texlive-fonts-extra \
             texlive-pictures \
             texlive-science \
             texlive-pstricks \
@@ -31,9 +32,10 @@ jobs:
       - name: Find all .tex files
         run: find . -name "*.tex" > texfiles.txt
 
-      - name: Build PDFs (continue on error)
+      - name: Build PDFs with PSTricks
         run: |
           mkdir -p pdfs
+          FAILED_FILES=""
           while read file; do
             echo "🧩 Building $file ..."
             base=$(basename "$file" .tex)
@@ -45,18 +47,14 @@ jobs:
             fi
             mkdir -p "$outdir"
 
-            # Build with pdflatex and PSTricks
             if ! pdflatex -shell-escape -interaction=nonstopmode -output-directory="$outdir" "$file"; then
-              echo "❌ $file failed"
-              touch "$outdir/$base.pdf.failed"
+              echo "❌ Failed: $file"
+              FAILED_FILES="$FAILED_FILES\n$file"
             fi
-
-            # Clean intermediate files
-            rm -f "$outdir/$base.aux" "$outdir/$base.log" "$outdir/$base.out" \
-                  "$outdir/$base.toc" "$outdir/$base.dvi" "$outdir/$base.ps"
           done < texfiles.txt
+          echo -e "$FAILED_FILES" > pdfs/build_failures.txt || true
 
-      - name: Generate fancy index.html with folder tree and icons
+      - name: Generate interactive index.html
         run: |
           echo '<!DOCTYPE html>
           <html>
@@ -64,9 +62,10 @@ jobs:
             <meta charset="UTF-8">
             <title>PDFs</title>
             <style>
-              ul { list-style-type: none; margin-left: 1em; }
+              ul { list-style-type: none; }
               li { margin: 0.3em 0; }
-              .failed { color: red; font-weight: bold; }
+              .folder::before { content: "📁 "; cursor: pointer; }
+              .file::before { content: "📄 "; }
             </style>
           </head>
           <body>
@@ -78,16 +77,12 @@ jobs:
             for f in "$path"/*; do
               if [ -d "$f" ]; then
                 name=$(basename "$f")
-                echo "<li>📁 <strong>$name</strong></li>" >> pdfs/index.html
+                echo "<li class=\"folder\">$name</li>" >> pdfs/index.html
                 generate_list "$f"
               elif [[ "$f" == *.pdf ]]; then
                 rel=${f#pdfs/}
                 name=$(basename "$f")
-                if [ -f "${f}.failed" ]; then
-                  echo "<li>📄 <span class=\"failed\">$name (failed)</span></li>" >> pdfs/index.html
-                else
-                  echo "<li>📄 <a href='$rel'>$name</a></li>" >> pdfs/index.html
-                fi
+                echo "<li class=\"file\"><a href=\"$rel\">$name</a></li>" >> pdfs/index.html
               fi
             done
             echo "</ul>" >> pdfs/index.html
@@ -95,7 +90,22 @@ jobs:
 
           generate_list pdfs
 
-          echo '</body></html>' >> pdfs/index.html
+          echo '
+          <script>
+          document.addEventListener("DOMContentLoaded", function() {
+            const folders = document.querySelectorAll(".folder");
+            folders.forEach(folder => {
+              const sublist = folder.nextElementSibling;
+              if (sublist && sublist.tagName === "UL") {
+                sublist.style.display = "none";
+                folder.addEventListener("click", () => {
+                  sublist.style.display = sublist.style.display === "none" ? "block" : "none";
+                });
+              }
+            });
+          });
+          </script>
+          </body></html>' >> pdfs/index.html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
