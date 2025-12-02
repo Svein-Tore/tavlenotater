@@ -23,10 +23,10 @@ jobs:
       - name: Find all .tex files
         run: |
           find . -name "*.tex" > texfiles.txt
-          echo "Found these TeX files:"
+          echo "Found TeX files:"
           cat texfiles.txt
 
-      - name: Build PDFs (pdflatex for images & auto-pst-pdf support)
+      - name: Build PDFs
         run: |
           mkdir -p pdfs
           while read -r file; do
@@ -40,79 +40,54 @@ jobs:
             fi
             mkdir -p "$outdir"
 
-            # run pdflatex twice with shell-escape (for auto-pst-pdf)
+            # pdflatex med shell-escape (for PSTricks/auto-pst-pdf)
             pdflatex -shell-escape -interaction=nonstopmode -halt-on-error -output-directory="$outdir" "$file" || exit 1
             pdflatex -shell-escape -interaction=nonstopmode -halt-on-error -output-directory="$outdir" "$file" || exit 1
           done < texfiles.txt
 
-      - name: Generate automatic index.html (Python)
+      - name: Generate dynamic index.html
         run: |
-          python3 - << 'PY'
-          import os
-          import html
+          python3 - <<'PY'
+import os, html
 
-          root = "pdfs"
+root = "pdfs"
 
-          def build_tree(path):
-              entries = []
-              try:
-                  names = sorted(os.listdir(path))
-              except FileNotFoundError:
-                  return entries
-              for name in names:
-                  full = os.path.join(path, name)
-                  if os.path.isdir(full):
-                      entries.append({
-                          "type": "dir",
-                          "name": name,
-                          "children": build_tree(full)
-                      })
-                  elif name.lower().endswith(".pdf"):
-                      entries.append({
-                          "type": "pdf",
-                          "name": name,
-                          "path": full.replace("\\", "/")
-                      })
-              return entries
+def build_tree(path):
+    entries = []
+    for name in sorted(os.listdir(path)):
+        full = os.path.join(path, name)
+        if os.path.isdir(full):
+            entries.append({"type":"dir", "name":name, "children":build_tree(full)})
+        elif name.lower().endswith(".pdf"):
+            entries.append({"type":"pdf","name":name,"path":full.replace("\\","/")})
+    return entries
 
-          def render(tree):
-              out = []
-              for item in tree:
-                  if item["type"] == "dir":
-                      out.append(f"<details><summary>{html.escape(item['name'])}</summary>")
-                      out.extend(render(item["children"]))
-                      out.append("</details>")
-                  else:
-                      url = html.escape(item["path"])
-                      text = html.escape(item["name"])
-                      out.append(f'<div class="file"><a href="{url}" target="_blank">{text}</a></div>')
-              return out
+def render(tree):
+    out = []
+    for item in tree:
+        if item["type"] == "dir":
+            out.append(f"<details><summary>{html.escape(item['name'])}</summary>")
+            out.extend(render(item["children"]))
+            out.append("</details>")
+        else:
+            url = html.escape(item["path"])
+            text = html.escape(item["name"])
+            out.append(f'<div class="file"><a href="{url}" target="_blank">{text}</a></div>')
+    return out
 
-          tree = build_tree(root)
-          html_lines = [
-              "<!DOCTYPE html>",
-              "<html lang='no'>",
-              "<head>",
-              "<meta charset='utf-8'/>",
-              "<meta name='viewport' content='width=device-width,initial-scale=1'/>",
-              "<title>PDF bibliotek</title>",
-              "<style>",
-              "body{font-family:Arial,Helvetica,sans-serif;padding:18px;background:#f7f7f8;color:#222}",
-              "h1{margin-bottom:12px}",
-              "details{margin:6px 0;padding-left:8px}",
-              ".file{margin:4px 0;padding-left:18px}",
-              "a{color:#0366d6;text-decoration:none}",
-              "a:hover{text-decoration:underline}",
-              "</style>",
-              "</head>",
-              "<body>",
-              "<h1>PDF bibliotek</h1>"
-          ]
-          html_lines.extend(render(tree))
-          html_lines.extend(["</body>","</html>"])
-          os.makedirs(root, exist_ok=True)
-          with open(os.path.join(root, "index.html"), "w", encoding="utf-8") as f:
-              f.write("\n".join(html_lines))
+tree = build_tree(root)
+html_lines = [
+    "<!DOCTYPE html>",
+    "<html lang='no'>",
+    "<head><meta charset='utf-8'/><title>PDF bibliotek</title></head>",
+    "<body><h1>PDF bibliotek</h1>"
+]
+html_lines.extend(render(tree))
+html_lines.append("</body></html>")
+
+os.makedirs(root, exist_ok=True)
+with open(os.path.join(root,"index.html"),"w", encoding="utf-8") as f:
+    f.write("\n".join(html_lines))
 PY
 
       - name: Deploy to gh-pages
