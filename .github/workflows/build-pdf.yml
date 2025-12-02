@@ -1,4 +1,4 @@
-name: Minimal Test
+name: Build LaTeX PDFs and Deploy to GitHub Pages
 
 on:
   push:
@@ -6,11 +6,67 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+
     steps:
-      - name: Checkout
+      # 1. Checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Print Hello
-        run: echo "Hei fra GitHub Actions!"
+      # 2. Install TeX
+      - name: Install TeX Live
+        run: sudo apt-get update && sudo apt-get install -y texlive-full dvipng
+
+      # 3. Build PDFs
+      - name: Build PDFs
+        run: |
+          mkdir -p pdfs
+          for file in $(find . -name "*.tex"); do
+            base=$(basename "$file" .tex)
+            dir=$(dirname "$file")
+            outdir="pdfs/$dir"
+            mkdir -p "$outdir"
+            pdflatex -interaction=nonstopmode -output-directory="$outdir" "$file"
+          done
+
+      # 4. Generate dynamic index.html
+      - name: Generate index.html
+        run: |
+python3 - <<'PY'
+import os
+
+pdf_root = "pdfs"
+index_file = os.path.join(pdf_root, "index.html")
+
+with open(index_file, "w", encoding="utf-8") as f:
+    f.write("<!DOCTYPE html>\n<html>\n<body>\n<h1>PDF Files</h1>\n<ul>\n")
+
+    for root, dirs, files in os.walk(pdf_root):
+        if "index.html" in files:
+            files.remove("index.html")
+        rel_path = os.path.relpath(root, pdf_root)
+        indent = "  " * rel_path.count(os.sep)
+        if rel_path == ".":
+            rel_path = ""
+        else:
+            f.write(f"{indent}<li>{os.path.basename(root)}<ul>\n")
+        for file in files:
+            f.write(f'{indent}  <li><a href="{os.path.join(rel_path, file)}">{file}</a></li>\n')
+        if rel_path != "":
+            f.write(f"{indent}</ul></li>\n")
+
+    f.write("</ul>\n</body>\n</html>\n")
+PY
+
+      # 5. Deploy to gh-pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./pdfs
