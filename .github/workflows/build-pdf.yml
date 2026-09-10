@@ -30,7 +30,12 @@ jobs:
             dvipng ghostscript
 
       - name: Find all .tex files
-        run: find . -name "*.tex" > texfiles.txt
+        run: |
+          find . -not -path "*/[Pp]røver*" \
+                 -not -path "*/[Pp]rover*" \
+                 -not -path "*/[Pp]roever*" \
+                 -not -name "*lambda*" \
+                 -name "*.tex" > texfiles.txt
 
       - name: Build PDFs with PSTricks
         run: |
@@ -113,3 +118,4 @@ jobs:
           github_token: ${{ secrets.PAT_TOKEN }}
           publish_dir: ./pdfs
           publish_branch: gh-pages
+          force_orphan: true
