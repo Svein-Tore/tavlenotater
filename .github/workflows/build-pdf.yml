@@ -29,8 +29,8 @@ jobs:
             texlive-publishers \
             dvipng ghostscript
 
-      - name: Find all .tex files
-        run: find . -name "*.tex" > texfiles.txt
+      - name: Find all .tex files unntatt prøver
+        run: find . -not -path "*/pr*" -name "*.tex" > texfiles.txt
 
       - name: Build PDFs with PSTricks
         run: |
