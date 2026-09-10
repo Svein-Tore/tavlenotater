@@ -29,8 +29,7 @@ jobs:
             texlive-publishers \
             dvipng ghostscript
 
-      - name: Find all .tex files unntatt prøver
-              - name: Find all .tex files
+      - name: Find all .tex files
         run: find . -not -path "*/[Pp]røver*" -not -path "*/[Pp]rover*" -not -path "*/[Pp]roever*" -name "*.tex" > texfiles.txt
 
 
