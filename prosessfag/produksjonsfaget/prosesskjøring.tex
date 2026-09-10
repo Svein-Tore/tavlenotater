@@ -1,0 +1,96 @@
+\documentclass{minmal}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb}
+\usepackage{array}
+\usepackage{placeins}
+\usepackage[colorlinks=true, linkcolor=black, urlcolor=blue]{hyperref}
+\usepackage{geometry}  % for marginer
+\usepackage{tabularx}  % automatisk kolonnebredde
+\geometry{margin=2cm}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{tikz, pgfplots}
+\pgfplotsset{compat=1.18}
+\begin{document}
+\begin{center}
+\textbf{Kjøring av prosessanleggene}   
+\end{center}
+Dette skal være en guide for dere når dere kjører prosessanlegget.Før vi begynner å kjøre anleggene er det noen parametre vi må se på.  Disse er unike for hvert anlegg:\\
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+    \hline
+         Anleggsnummer&min. offset&Tid til stabilt$(4\cdot T)$& sprangendring&stasjonærverdi (ca.)\\
+    \hline
+         3& 425 &  & 10&??\\
+        \hline
+         5& 421 &  & 10&86\\
+    \hline
+         7&451  &  &5&?? \\
+    \hline     
+        12&437  &  & 5&58\\
+    \hline     
+         &  &  & &\\
+    \hline     
+         &  &  & &\\
+    \hline     
+         &  &  & &\\
+    \hline     
+    \end{tabular}
+    \caption{Dette er unike verdier for hvert enkelt anlegg}
+    \label{tab:placeholder}
+\end{table}
+\section{Innstilling av offset  til første stasjonærverdi} 
+Når man jobber med praktisk prosessregulering så er stasjonærverdi et viktig begrep.  Litt enkelt forklart er det noe prosessverdien vår oppnår når den "flater" ut, altså blir konstant. Dette kan vi se i figuren under:\\
+\plotfopdt{datafil}{30}{50}{16}{10}\\
+Vi kan tenke oss at figuren over viser en sprangrespons i pådrag, dvs. uten regulator.  Vi ser at i begynnelsen (de 16 første sekundene) så er nivået konstant lik 10\%.  Vi sier at nivået er ved en stasjonærverdi.  Etter at det har gått ca. 300sekund så har prosessen oppnådd en ny stasjonærverdi på 40\%.  Når vi starter Anlegget ønsker vi å ha en stasjonærverdi sånn ca. rundt 10\%.
+\newpage 
+\noindent Her er en måte du kan få det til ganske raskt:\\
+1.  Sett manuell verdi til 20\%:\\
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.25\linewidth]{manuell_20.png}
+    \caption{Sett manuel verdi til 20\%}
+    \label{fig:placeholder}
+\end{figure}\\
+2. Sjekk hva som er min. offset verdi for anlegget du kjører (for anlegg 5 er den f.eks. 421)\\\\
+3. Sett off set verdien 20 høyere enn min. verdi (for anlegg 5 blir det da 421+20=441).\\\\
+4. Følg med på om nivået stiger. Hvis ikke pumpen går trykk og hold inne knapp 1 fra venstre på PLS.\\\\
+5. Når nivået kommer over 15\% reduser off set med 15.\\\\
+6. Nå er det viktig å følge med på nivået. Hvis det fortsatt stiger, reduser off set med 2.\\\\
+7. Nå venter du og ser om nivået begynner å synke.\\\\
+8. Om det begynner å synke så venter du til den stabiliserer seg.  Hvis ikke reduser off set med 2 igjen.\\\\
+9. Hvis den stabiliserer seg mellom 9\% og 12\% så er det OK.\\\\
+10.  Går den under 9\% kan du øke med 2\% og se om den stiger.  Hvis ikke øk off set med 1.\\\\
+11. Fortsett til nivået stabiliserer seg mellom 9\% og 12\%.\\\\
+12.  Nå kan du utføre en sprangrespons i pådrag som angitt i tabellen over for anlegget du bruker (5\% eller 10\%).\\\\
+13. Vent til du oppnår ny stasjonærtilstand.  Den er angitt  som Tid til stabilt i tabellen over (ikke ferdig ennå, det fikser vi idag).\\\\
+14.  Nå kan du trykke på analyser.
+\newpage
+\noindent 15. Siden analyseprogrammet og simulatorprogrammet kjører uavhengig av hverandre, må du nå manuelt overføre de identifiserte verdiene. Les av verdiene i analysevinduet og tast dem inn på frontpanelet til simulatorprogrammet som vist med pilene i Figur 2:
+\begin{itemize}
+    \item \textbf{rød pil:} dY $\rightarrow$ Sprangendring nivå
+    \item \textbf{Blå pil:} Y0 $\rightarrow$ Startnivå
+    \item \textbf{Gul pil:} Kp $\rightarrow$ Proporsjonalforsterkning
+    \item \textbf{Grønn pil:} Ti $\rightarrow$ Integraltid
+\end{itemize}
+Når du har tilpasset grafenså overfører du vberdiener til simulator programmet:\\
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\linewidth]{verioverforing.png}
+    \caption{Enter Caption}
+    \label{fig:placeholder}
+\end{figure}\\
+16.  Når dette er utført trykker du på sprangendring 8setpunkt):
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.25\linewidth]{sprangendirng_setpunkt.png}
+    \caption{Trykk på denne for å utføre sprangendring i et punkt. det nye set punktet er dY+Y0=41,4\%+9,5\%=50,9\%}
+    \label{fig:placeholder}
+\end{figure}
+
+ 
+
+
+\end{document}
