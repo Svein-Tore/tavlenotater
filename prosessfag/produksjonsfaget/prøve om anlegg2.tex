@@ -1,0 +1,84 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[norsk]{babel}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+\usepackage{amssymb}
+
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Laboratorieoppgave: Reguleringsteknikk}
+\rhead{Prosjekt: Den Digitale Tvillingen}
+\cfoot{\thepage}
+
+\begin{document}
+
+\section*{Lab-oppgave: Systemidentifikasjon og SIMC-tuning}
+
+\textbf{Gruppe:} \underline{\hspace{5cm}} \textbf{Dato:} \underline{\hspace{3cm}} \textbf{Anlegg nr:} \underline{\hspace{1cm}}
+
+\subsection*{1. Identifikasjon av prosessen (Hvit og gul kurve)}
+\textit{Kjør et sprang på tanken (Modus 0). OBS! Dere må ha is i magen og vente til den hvite kurven er helt flatlinjet før dere stopper målingen.}
+
+\subsubsection*{Oppgaver MENS dere venter på sprangresponsen (10--15 min):}
+\begin{enumerate}
+    \item Tegn en grov skisse på frihånd av hvordan dere \textbf{tror} den hvite kurven vil se ut til slutt. Marker hvor dere antar at 63 \%-punktet vil lande på Y-aksen.
+    \item Gå bort til det fysiske anlegget. Mål avstanden i centimeter fra pumpa til innløpet i tanken. Diskuter i gruppa hvordan denne rørlengden påvirker dødtiden ($L$) dere ser på skjermen.
+    \item Slå opp SIMC-formelen for $K_p$. Hvis tidskonstanten ($T$) viser seg å bli veldig stor, vil regulatoren da bli aggressiv (høy $K_p$) eller forsiktig (lav $K_p$)? Begrunn svaret: \\
+    \hrulefill
+\end{enumerate}
+
+\subsubsection*{Resultat av identifikasjonen:}
+Når den gule kurven dekker den hvite perfekt, noter de endelige verdiene:
+\begin{itemize}
+    \item Forsterkning ($K$): \underline{\hspace{2cm}} 
+    \item Tidskonstant ($T$): \underline{\hspace{2cm}} sekunder
+    \item Dødtid ($L$): \underline{\hspace{2cm}} sekunder
+\end{itemize}
+
+\subsection*{2. Sertifisering for "Egendefinert Lambda"}
+\textit{Før dere får lov til å bruke den manuelle inntastingsboksen i LabVIEW, må dere regne ut tålegrensen for anlegget deres manuelt og få godkjenning av lærer.}
+\begin{enumerate}
+    \item Regn ut målet for 5 \% oversving. Hvis setpunktet er 50 \%, hva er maksimalt tillatt nivå på tanken? \\
+    \textbf{Maks nivå:} $50\,\% \times 1,05 = $ \underline{\hspace{3cm}}
+    \item Bruk SIMC-formelen $K_p = \frac{1}{K} \cdot \frac{T}{\lambda + L}$. Hva skjer matematisk med forsterkningen ($K_p$) til regulatoren når dere tvinger $\lambda$ til å bli veldig liten? \\
+    \hrulefill
+\end{enumerate}
+$\square$ \textbf{GODKJENT AV LÆRER (Signatur):} \underline{\hspace{4cm}} *(Åpner for manuell tasting)*
+
+\newpage
+
+\subsection*{3. Konkurranse: Finn den optimale Fartsfaktoren}
+\textit{Bytt til regulatormodus (Modus 1). Målet er å oppnå høyest mulig fartsfart ($T/\lambda$) uten å passere grensen for 5 \% oversving på den blå kurven.}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Strategi ($\lambda$)} & \textbf{Fartsfaktor ($T/\lambda$)} & \textbf{Integraltid ($T_i$)} & \textbf{Oversving (\%)} & \textbf{Stabil? (J/N)} \\ \midrule
+$\lambda = T$                 & 1                                  &                              &                         &                        \\
+$\lambda = T/2$               & 2                                  &                              &                         &                        \\
+$\lambda = T/4$               & 4                                  &                              &                         &                        \\
+$\lambda = T/6$               & 6                                  &                              &                         &                        \\
+Egendefinert: \dots           &                                    &                              &                         &                        \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\subsection*{4. Analyse og diskusjon}
+\begin{enumerate}
+    \item Hva skjer med \textbf{Integraltiden ($T_i$)} når dere prøver å gjøre systemet raskere? \\
+    \hrulefill
+    \item Hvilken fartsfaktor ga den raskeste responsen uten å bryte 5 \%-regelen? \\
+    \hrulefill
+    \item Gruppe 2 fra forrige klasse opplevde at den blå kurven (virkeligheten) landet stabilt, men et par prosent \textbf{over} den rosa kurven (ønsket respons). Hvilken feil gjorde de i del 1 som førte til dette? \\
+    \hrulefill
+\end{enumerate}
+
+\subsection*{5. Dokumentasjon}
+\textit{Lagre PNG-bilde av deres beste forsøk. Sørg for at gruppenavn og tabellverdier er synlige i programmet før eksport.}
+
+\end{document}

@@ -1,0 +1,80 @@
+\documentclass{minmal}
+\begin{document}
+\begin{center}
+\textbf{Løsningsforslag til prøve om varmevekslere:}
+\end{center}
+\textbf{Oppg. 1:}\nl[1]
+\noindent Forklar hva som mens med begrepene:\nl[1]
+a) Spesifikk varmekapasitet: Den energien som trengs for å varme opp 1kg av stofffget $1^0C$\nl[1]
+b) Spesifikk smeltevarme:Den energien som trengs for å smelte 1kg avstoffet.\nl[1]
+c) Spesifikk fordampingsvarme: Den energien som trengs for å fordmape 1kg av stoffet.\nl[1]
+d) Hvilken verdi har vannets spesifikke varmekapasitet?  $C_{P,vann}=4,2kJ/kg$\nl[1]
+e) Hvilken verdi har vannets spesifikke fordampingsvarme? $l_f=2256kJ/kg$ \nl[2]
+\\
+\textbf{Oppg. 2:}
+
+\noindent a) 8,3kg vann som har en temperatur på 17\textsuperscript{0}C skal varmes til 73\textsuperscript{0}C. Beregn energimengden som trengs for å få til dette når du vet at vannets spesifikke varmekapasitet er C\textsubscript{P,vann}=4,2kJ/kg\textsuperscript{0}C. \nl[1]
+\[Q=m\cdot c_p\cdot \Delta T=8,3kg\cdot 4,2kJ/kg^0C\cdot (73-17)^0C=1952,2kJ\]\nl[1]
+b) Hvor mye energi kreves for å fordampe 6,3kg vann ved 100\textsuperscript{0}C når du vet at vannets spesifikke fordampingsvarme er l\textsubscript{f} =2256kJ/kg? \nl[1]
+\[Q_f=m\cdot l_f=6,3kg\cdot 2256kJ/kg=14212,8kJ \]
+c) Hvor mye energi trengs for å smelte 6,3kg is når du vet at vannets spesifikke smeltevarme er l\textsubscript{s}=334kJ/kg.\nl[1]
+\[Q_s=m\cdot l_s=6,3kg\cdot 334kJ/kg=2104,2kJ \]
+d) Hvor mye energi trengs for å fordampe 7,8kg is som har en temperatur på -13\textsuperscript{0}C?\nl[1]
+Dette er en lit vanskelig oppgave. Her det fire ulike energier vi må se på:\nl[1]
+1. Oppvarming av 7,8kg is fra $-13^0c$ til $0^0C$:
+\[Q_1=m\cdot C_{P,is}\cdot \Delta T= 7,8kg\cdot 2,1kJ/kg^0C\cdot 13^0C=212,9kJ\]\nl[1]
+2. Smelting av 7,8kg is:
+\[Q_s=m\cdot l_s=7,8kg\cdot 334KJ/kg=2605,2kJ\]\nl[1]
+3. Oppvarmiming av vann fra $0^0C$ til $100^0C$:\nl[1]
+\[Q_2=m\cdot C_{P,vann}\cdot \Delta T=7,8kg\cdot 4,2kJ/kg^0C\cdot 100^0C=3276kJ\]\nl[1]
+4. fordamping av 7,8kgg vann:\nl[1]
+\[Q_f=m\cdot l_f=7,8kg\cdot 2256KJ/kg=17596,8kJ\]\nl[1]
+Den toale energien finner vi ved å  summere alle disse. \nl[1]
+\[Q_{total}=212,9kJ+2605,2kJ+3276kJ+178596,8kJ=23690,6kJ\]
+\newpage
+\noindent\textbf{Oppg. 3:}\nl[1]
+Gitt følgende varmeveksler:\nl[1]
+\varmeveksler{75}{55}{?}{7}{23}{25}\nl[1]
+a) Hvor mye energi overføres i denne varmeveksleren?\nl[1]
+Her kjenner vi alt på varm side:\nl[1]
+\[Q=F\cdot C_P\cdot \Delta T=23kg/s\cdot 4,2kJ/kg^0C\cdot (75-55)^0C=1932kJ\]
+\newpage
+b) Hva blir temperaturen ut av varmeveksleren på kald side ($T_{k,ut}$)?\nl[1]
+Her bruker vi trekantformelen og da finner vi $\Delta T$:\nl[1]
+\[\Delta T=\frac{Q}{F\cdot C_P}=\frac{1932kJ}{25kg/s\cdot4,2kJ/kg^0C}=18,4^0C\]\nl[1]
+De betyr at temperaturen på kald side øker med $18,4^0C$. Dermed blir temperatuen ut på kald side lik:
+\[T_{k,ut}=7^0C+18,4^0C=25,4^0C\]\newpage
+Gitt følgende varmeveksler:
+\varmeveksler{66}{46}{37}{20}{?}{19}
+c)	Bestem den overførte varmemengden i varmeveksleren.\nl[1]
+Her kjenervi ltg på kald side.  Vi får:\nl[1]
+\[Q=F\cdot C_P\cdot \Delta T=19kg/s\cdot 4,2kJ/kg^0C\cdot (37-20)^0C=1356,6kJ\]
+d)	Bestem $F_v$.\nl[1] 
+Her bruker vi trekantforemelen og finner $F_v$:\nl[1]
+\[F=\frac{Q}{C_P\cdot \Delta T}=\frac{1356,6kJ}{4,2kJ/kg\cdot (66-46)^0C}=16,15kg/s\]
+
+\newpage
+\textbf{Formler:}\nl[1]
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{formel_VV.png}
+    
+    \label{fig:placeholder}
+\end{figure}\\
+\textbf{ Fordampingsvarme:}
+
+ \noindent $Q_f=m\cdot l_f$\\
+$l_f=2256kJ/kg$\\
+
+\noindent\textbf{Smeltevarme:}\\
+
+ \noindent
+ $Q_s=m\cdot l_s$\\
+\noindent
+$l_s=334kJ/kg$\\
+  m=masse (kg)\\
+\textit{C\textsubscript{p,vann}=4,2kJ/kgC\\  
+C\textsubscript{p,is}=2,1kJ/kgC}
+
+
+\end{document}

@@ -1,0 +1,71 @@
+\documentclass[12pt]{article}
+
+\usepackage{amsmath}
+\usepackage{geometry}
+\geometry{a4paper, margin=2.5cm}
+
+\begin{document}
+
+\title{Brukerveiledning -- FOPDT Interaktiv Modell i Google Colab}
+\author{}
+\date{}
+\maketitle
+
+\section*{Hvordan åpne notatboken}
+\begin{enumerate}
+    \item Klikk på lenken læreren har gitt deg for å åpne notatboken i Google Colab.
+    \item Du trenger ikke Google-konto for å kjøre den, men det anbefales.
+\end{enumerate}
+
+\section*{Slik bruker du modellen}
+\begin{enumerate}
+    \item Last opp målefilen \texttt{pid\_test.txt} dersom notatboken ber om det.
+    \item Juster sliderne:
+    \begin{itemize}
+        \item $A$ – amplituden på steget
+        \item $T$ – tidskonstant
+        \item $L$ – død tid
+        \item $y_0$ – startnivå
+    \end{itemize}
+    \item Observer hvordan den røde modellkurven oppdateres.
+    \item Tilpass modellen slik at den passer best mulig til de blå måledataene.
+    \item Noter de endelige verdiene for $A$, $T$, $L$ og $y_0$ som står under grafen.
+\end{enumerate}
+
+\section*{Beregn PID-parametre}
+Bruk verdiene du fant til å beregne PID-parametrene.  
+Dette skal du gjøre for hånd.
+
+\[
+K = \frac{A}{\Delta u}
+\]
+
+\[
+K_p = \frac{T}{K \cdot (\lambda + L)}
+\]
+
+\[
+T_i = T
+\]
+
+\[
+T_d = \frac{L \cdot T}{L + \lambda}
+\]
+
+\section*{Lagre figur eller fil}
+\begin{itemize}
+    \item Klikk \textbf{Last ned PNG} for å lagre grafen.
+    \item Du kan lagre din egen kopi av notatboken via:
+    \begin{itemize}
+        \item \texttt{File → Download .ipynb}, eller
+        \item \texttt{File → Save a copy in Drive}
+    \end{itemize}
+\end{itemize}
+
+\section*{Viktig}
+\begin{itemize}
+    \item Du kan ikke lagre endringer tilbake til lærerens GitHub.
+    \item Du kan jobbe fritt i din egen kopi uten å ødelegge originalen.
+\end{itemize}
+
+\end{document}

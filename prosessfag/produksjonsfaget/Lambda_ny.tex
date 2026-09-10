@@ -15,41 +15,41 @@ En First-Order Plus Dead Time (FOPDT)-modell for en trinnrespons er gitt ved:
 \[
 y(t) =
 \begin{cases}
-y_{\text{start}}, & t < \theta \\
-y_{\text{start}} + A \cdot \big(1 - e^{-\frac{t-\theta}{\tau}}\big), & t \ge \theta
+y_{\text{start}}, & t < L \\
+y_{\text{start}} + \Delta Y\cdot \big(1 - e^{-\frac{t-L}{T}}\big), & t \ge L
 \end{cases}
 \]
 
 \noindent hvor:
 \begin{itemize}
     \item $y_{\text{start}}$ = startverdi før steget
-    \item $A = K \cdot \Delta U$ = amplituden (endring i utgang)
+    \item $\Delta Y = K \cdot \Delta U$ = amplituden (endring i utgang)
     \item $K$ = prosessforsterkning
     \item $\Delta U$ = stegstørrelse i inngangen
-    \item $\tau$ = tidskonstant
-    \item $\theta$ = forsinkelse (dead time)
+    \item $T$ = tidskonstant
+    \item $L$ = forsinkelse (dead time)
 \end{itemize}
 
 \section*{2. Beregning av parametere}
 \begin{align*}
 \Delta Y &= y_{\text{slutt}} - y_{\text{start}} \\
 K &= \frac{\Delta Y}{\Delta U} \\
-A &= K \cdot \Delta U = \Delta Y
+\Delta Y &= K \cdot \Delta U
 \end{align*}
 
 \noindent Tidskonstanten $\tau$ finnes som:
 \[
-\tau = t_{63\%} - \theta
+T = T_{63\%} - \theta
 \]
 der $t_{63\%}$ er tidspunktet når prosessen har nådd $63\%$ av endringen:
 \[
 y_{63\%} = y_{\text{start}} + 0.63 \cdot \Delta Y
 \]
 
-\section*{3. Lambda-metoden (IMC tuning)}
+\section*{3. Lambda-metoden (SIMC tuning)}
 For en FOPDT-prosess:
 \[
-K_p = \frac{\tau}{K(\lambda + \theta)}, \quad T_i = \tau, \quad T_d = \frac{\theta}{2}
+K_p = \frac{\tau}{K(\lambda + L)}, \quad T_i =min(T,\lambda+L), \quad T_d = \frac{L}{2}
 \]
 
 \noindent hvor:
@@ -65,7 +65,7 @@ Gitt:
 y_{\text{start}} = 0.253, \quad y_{\text{slutt}} = 0.78, \quad \Delta U = 0.1
 \]
 \[
-\Delta Y = 0.527, \quad K = 5.27, \quad \theta = 3 \text{ s}, \quad \tau = 2 \text{ s}
+\Delta Y = 0.527, \quad K = 5.27, \quad L = 3 \text{ s}, \quad T = 2 \text{ s}
 \]
 
 \noindent PID-parametere for ulike $\lambda$:

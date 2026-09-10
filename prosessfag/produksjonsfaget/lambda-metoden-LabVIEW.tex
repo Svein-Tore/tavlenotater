@@ -29,12 +29,15 @@
 \newpage
 \section{Introduksjon}
 Når man arbeider med styresystemer i industrien så er det viktig at man har regulatorer med gode regulatorparametre ($K_p$,$T_i$ og $T_d$).  Har man gode parametre kan en regulering se slik ut:
+
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.5\linewidth]{prosessfag/bilder/optimal_regualtor.png}
-        \label{fig:placeholder}
-\end{figure}\\
+    \includegraphics[width=0.5\linewidth]{simc_sim.png}
+    \caption{Enter Caption}
+    \label{fig:placeholder}
+\end{figure}
 Men om vi har feil parametre så kan det bli veldig feil.  Her kan du se et eksempel på det:\\
+
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.5\linewidth]{prosessfag/bilder/regulator_kaos.png}
@@ -42,71 +45,231 @@ Men om vi har feil parametre så kan det bli veldig feil.  Her kan du se et ekse
 \end{figure}
 
 
-\noindent Vi har tidligere sett på hvordan vi kan optimalisere en prosess med Ziegler-Nichols metode.  Denne gir gode resultater men kan være litt aggressiv.  Men det å øke $K_P$ verdien til man får stående svingninger er noe man sjeldent får til. I hvert fall i virkelige prosessanlegg, som vi skal jobbe med nå.  Et alternativ til denne er Lambda metoden. Lambda-metoden (også kjent som Skogestad-metoden) er en modellbasert metode for å stille inn PI- og PID-regulatorer. Metoden er spesielt nyttig for industrielle prosesser som kan beskrives som førsteordens systemer med tidsforsinkelse (FOPDT), for eksempel tankanlegg, temperatur- strømnings-mengde- eller nivåprosesser.  Metoden går ut på at man setter regulatoren i manuell.  Så gjør man en endring (manuelt) i pådragsorganet (f.eks. 5--10\%).  
-\newpage 
-Om vi gjør det vil den regulerte størrelse få en endring veldig likt kurven under:\\
+\noindent Vi har tidligere sett på hvordan vi kan optimalisere en prosess med Ziegler-Nichols metode.  Denne gir gode resultater men kan være litt aggressiv.  Men det å øke $K_P$ verdien til man får stående svingninger er noe man sjeldent får til. I hvert fall i virkelige prosessanlegg, som vi skal jobbe med nå.  Et alternativ til denne er Lambda metoden. Lambda-metoden (også kjent som Skogestad-metoden) er en modellbasert metode for å stille inn PI- og PID-regulatorer. Metoden er spesielt nyttig for industrielle prosesser som kan beskrives som førsteordens prosess med dødtid (FOPDT), for eksempel tankanlegg, temperatur- strømnings-mengde- eller nivåprosesser.  
+\newpage
+\section{Hva er et FOPDT system?}
+\subsection{En enkel tankmodell som et FOPDT system}
+Vi skal nå se nærmere på hva som menes med et FOPDT system.  Det står for førsteordens prosess med dødtid.  Men hva betyr det?  Et eksempel kan være en tankprosess som vist i figuren under: 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\linewidth]{tankprosess_ny.png}
+    \caption{En enkel tankprosess.}
+    \label{fig:placeholder}
+\end{figure}\\
+Vi tenker at vi har en situasjon der det strømmer like mye inn og ut av tanken.  Da vil selvfølgelig nivået i tanken være konstant.  Men om vi åpner opp litt mer på ventilen inn i tanken så vil nivået i tanken stige.  Siden vi har en åpen tank så vil væskemengden ut av tanken også øke.  Det spesielle som skjer da, for et FOPDT system, er at etter en stund vil væskemengden ut av tanken bli lik væskemengden inn i tanken, og nivået vil stabilisere seg igjen.  Dette forløpet kan vi fremstille grafisk:        
 \begin{figure}[h]
 \centering
 \begin{tikzpicture}
-\draw [decorate, decoration={brace,amplitude=15pt}] (11.3,0) -- (11.3,4.8);
+
 \begin{axis}[
     width=13cm,
     height=7cm,
     xlabel={Tid [s]},
     ylabel={PV},
-    xmin=0, xmax=60,
-    ymin=0, ymax=1.1,
     grid=both,
     title={Sprangrespons med L, T og $\Delta Y  $},
 ]
 
 % ] 
 --- Parameters ---
-\def\L{4}
+\def\L{6}
 \def\T{14}
 \def\K{1}
-
+\def\dY{5}
+\def\Y{0.1}
+\def\domain{160}
+\draw [decorate, decoration={brace,amplitude=15pt}] (\domain,\Y) -- (\domain,\Y+\dY);
 % --- FOPDT response curve ---
 \addplot[
     thick,
     red,
-    domain=0:60,
+    domain=0:\domain,
     samples=400,
 ]
-{ (x < \L) * 0 + (x >= \L) * (1 - exp(-(x-\L)/\T)) };
+{ (x < \L) *\Y + (x >= \L) *((1 - exp(-(x-\L)/\T))*\dY+\Y)};
 
 % --- Mark L ---
-\addplot[dashed] coordinates {(\L,0) (\L,1)};
-\node[rotate=90, anchor=south] at (axis cs:\L,0.25) {Død tid $L$};
+\addplot[dashed] coordinates {(\L,0) (\L,1*\dY)};
+\node[rotate=90, anchor=south] at (axis cs:\L,0.25*\dY) {Død tid $L$};
 
 % --- Mark L+T ---
 \pgfmathsetmacro{\LT}{\L + \T}
-\addplot[dashed] coordinates {(\LT,0) (\LT,1)};
-\node[rotate=90, anchor=south] at (axis cs:\LT,0.25) {$L + T$};
+\addplot[dashed] coordinates {(\LT,0) (\LT,1*\dY)};
+\node[rotate=90, anchor=south] at (axis cs:\LT*1.6,0.3*\dY) {$L + T$};
 
 % --- 63.2% line ---
-\pgfmathsetmacro{\ytau}{0.632}
+\pgfmathsetmacro{\ytau}{0.632*\dY)+\Y}
 \addplot[dashed] coordinates {(0,\ytau) (60,\ytau)};
-\node[anchor=west] at (axis cs:1,\ytau+0.03) {63.2\% nivå};
+\node[anchor=west] at (axis cs:1*\L,\ytau*1.1) {63.2\% nivå};
 
 % --- ΔPV marking ---
-\node[anchor=west] at (axis cs:52,0.5) {$\Delta Y$};
+\node[anchor=west] at (axis cs:\domain*0.85,0.53*\dY) {$\Delta Y$};
 \draw[<->]
-    (axis cs:\L,0.5)
+    (axis cs:\L,\Y)
     --
-    (axis cs:\LT,0.5)
+    (axis cs:\LT,\Y)
     node[midway, above] {$T$};
 \end{axis}
-
 \end{tikzpicture}
-\end{figure}
+\end{figure}\\
+Her er det noen parametre og måleverdier som er for å beskrive dette FOPDT systemet:
+\begin{itemize}
+    \item \textit{L}: Dette er dødtiden til prosessen.  Dødtid er tiden fra det skjer en endring i ventilen, og til vi ser en endring i prosessverdien (i dette tilfellet nivået i tanken).  Dødtiden i dette tilfellet er tiden det tar for væsken (den nye væskemengden) å renne ut av ventilen, gjennom røret, og faktisk treffe væskeoverflaten i tanken.   Tiden nivåmåleren (f.eks. en trykktransmitter eller en radarsensor) bruker på å registrere at overflaten faktisk har flyttet på seg vi også være en del av dødtiden.  Så hvor langt røret fra ventil og til tanken er, det er avgjørende for dødtiden i dette tilfellet.  
+    \item \textit{$\Delta Y$}: Dette er den totale endringen i prosessverdien (nivået) fra startverdien til den nye stasjonærverdien.  
+    \item\textit{$\Delta U$:}Dette er sprangendringen vi ønsker å gjøre manuelt med pådragsorganet, og i dette programmet angis den i prosent.
+    \item\textit{K:} Forsterkningen (\(K\)) er forholdet mellom endringen i prosessverdien ($\Delta Y$) og den manuelle endringen i  pådragsorganet ($\Delta U$).   Her er den matematiske definisjonen:\\
+    
+    \[K=\frac{\Delta Y}{\Delta U}\]
+    \item \textit{T}: Tiden etter dødtiden og frem til prosessverdien har nådd 63,2\% av den totale endringen i prosessverdien (63,2\% av $\Delta Y$).
+    \item \textit{$Y_0$}: Dette er prosessverdien før sprangendringen. 
+    \item \textit{$Y_\infty$}: Dette er prosessverdien når den har nådd en ny stasjonærverdi (en verdi som ikke endrer seg).  Vi ser at vi bruker symbolet $\infty$.  Dette er tegnet for uendelig , og skal vise til at vi har kommet til en ny verdi som ikke endrer seg.  
+\end{itemize}
+Her er det også viktig å være klar over at $\Delta Y=Y_\infty - Y_0$.  Symbolet $\Delta$ er den greske bokstaven for D.  Og den brukes for forskjeller, for det kalles for \textbf{\textit{D}}ifferanse. Vær klar over at $\Delta Y$ alltid skal oppgis som en positiv verdi i bergnigen våre, selv om $Y_\infty$ er mindre enn $Y_0$.  
+\subsection{Et eksempel fra et virkelig tankanlegg}
+Vi skal nå se på et mer konkret eksempel på en førsteordens prosess med dødtid.  Dette eksempelet er hentet fra ett av prosessanleggene vi har i klasserommet:  
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1.0\linewidth]{sprangresons_uten_regulator.png}
+    \caption{nivåets endring når vi gjør en sprangendring}
+    \label{fig:placeholder}
+\end{figure}\\
+Her kommer en forklaring på denne grafen:\\\\
+\liste[*]{
+\item Etter 38s gjør vi en sprangendring i pådraget på 5\%.  Det tar  ca. 15s fra ventilen får beskjed om å endre seg (5\%) og til nivået begynner å stige .  Denne tiden kaller vi dødtiden L.  Den er merket lilla på grafen (avstanden mellom den røde og lilla er liten, men tilsvarer 15 s).
+%Men endringen i pådraget skjer momentant:\\
+%\begin{figure}[h]
+%    \centering
+%    \includegraphics[width=1.0\linewidth]{sprangendrin_5prosent.png}
+%    \caption{Her gjør vi en varig endring i pådraget på 5\%}
+%    \label{fig:placeholder}
+%\end{figure}\\
+\item I grafen under skal vi legge merke til tiden T=422,0s.  Dette er tiden det tar prosessverdien vår ( i dette tilfellet nivået) å nå 63,2\% av sin totale endring.  Vi skal nå forklare hva som menes med SIMC metoden.  Det handler om at regulatoren, med sine PID parametre, klarer å styre prosessen vår som en FOPDT prosess men med en tidskonstant som er mindre enn selve prosessen.  Tidskonstanten for FOPDT prosessen til regulatoren kaller vi lambda ($\lambda$).  I grafen under ser vi regulatoren når den har en tidskonstant $\lambda$ som er halvparten av tidskonstanten til prosessen:\\
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\linewidth]{regulator_med_lambda_2.png}
+    \caption{Denne figuren viser fint hvordan $\lambda$ regulering fungerer.}
+    \label{fig:placeholder}
+\end{figure}\\
+Denne figuren viser fint hvordan $\lambda$ regulering fungerer. Når vi halverer tidskonstanten ($\lambda=T/2$) oppnår prosessen det nye set-punktet på halvparten av tiden.}
+\newpage
+Hva vil skje om vi halverer $\lambda$ verdien en gang til, altså setter $\lambda=T/4$?  Det ser vi grafen:\\
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\linewidth]{prosessfag//produksjonsfaget/lambdaT_4.png}
+    \caption{Her ser vi hvordan reguleringen blir når $\lambda=T/4$.   Vi legge rmerke til at reguleringen har nådd 98,2\% på den tiden prosessen uten regulering har nådd 63,2\%.} 
+    \label{fig:placeholder}
+\end{figure}\nl[1]
+Vi ser at vi med $\lambda=T/4=422s/4=105,4s$ så vil prosessen oppnå 98,2\% etter $4\cdot\lambda=4\cdot105,5s=422s$\footnote{En FOPDT prosess når 98,2\% når det har gått tiden $4\cdot T$ etter dødtiden L.  Når du har en regulator når den 98,2\% når det har gått tiden $4\cdot\lambda$ etter dødtiden L.  Man velger ofte å se på dette som den nye stasjonærverdien, for man er veldig nær 100\%.}.  Det betyr at når $\lambda=T/4=422s/4=105,5s$  så vil prosessen  vår nå ny stasjonærverdi på den tiden prosessen utgen regulering bruker på å nå 63,2\% av ny stasjonærverdi.  Prosessen går m.a.o. 4 ganger så raskt. Når vi ser på disse kurvene så er det to momenter som viser at SIMC metoden er god:\\
+\liste[*] {
+    \item PI regulatoren vil gi oss en respons som følger en førsteordens prosess med dødtid. Tidskonstanten vil være lik $\lambda$. Dette gir oss en veldig stabil regulering.
+    \item Ved å endre $\lambda$ verdien kan vi praktisk talt bestemme hvor rask prosessen skal være uten at vi får ustabilitet (mye svinginger) og oversving. 
+    }
+\subsection{Formler for beregning av PI-parametre}
+Vi skal nå se på hvordan vi skal  beregne regulatorparameterne $K_P$ og integraltiden $T_i$ .  Først beregnes prosessforsterkningen  $K$:\\\\
+\begin{center}
+        {\Large $K=\frac{\Delta Y}{\Delta U}$}
+\end{center}\nl[2]
+\newpage
+\noindent \textbf{Valg av lukket sløyfe-tidskonstant (\texorpdfstring{$\lambda$}{lambda})}:\\\\
+Så må vi velge $\lambda$ avhengig av den robusthet og respons vi ønsker:
+\[
+\lambda = T/2 \quad (\text{rolig, stabil})
+\]
+\[
+\lambda = T/4 \quad (\text{moderat, robust})
+\]
+\[ 
+\lambda = T/6 \quad (\text{rask respons})
+\]
 
+Så beregnes parametrene $(K_P \: og \: T_I)$ for en PI-regulator:
+\begin{equation}
+K_p = \frac{T}{K (\lambda + L)}
+\end{equation}
+\begin{equation}
+T_i = min(T,4\cdot (\lambda+L))
+\end{equation}
 
-\noindent I denne grafen er det flere verdier som er viktige for å finne optimale PID parametre.  Og det er dødtiden (\textit{L}), tidskonstanen (\textit{T}) og endringen i prosessverdien ($\Delta Y$).  $\Delta Y$ brukes til å beregne prosessforsterkningen (\textit{K})  
-\section{Fremgangsmåte for Lambda-tuning}
- 
+\subsection{Beregningseksempel}
+I grafen under har vi et eksempel fra en nivåprosess:\\
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\linewidth]{sprangresons_uten_regulator.png}
+    \caption{Et eksempel for en nivåprosees}
+    \label{fig:placeholder}
+\end{figure}\\
+Her ser vi at:
+
+\[
+\Delta Y= 65,0, \quad T = 422,0s\quad L = 15,0s \quad Y_0=11,3\%
+\]
+Vi kan velge:  \[\lambda = \frac{T}{2}=\frac{422,0s}{2}=211,0s\].
+
+Så må vi beregne K (sprangendring $\Delta U=5\%$) :\\
+
+\[K=\frac{\Delta Y}{\Delta U}=\frac{54,0\%}{5\%}=13,0\]
+\newpage
+Da blir PI-parametrene:\\\\
+
+\begin{align}
+K_p=\frac{T}{K\cdot(\lambda+L)}=\frac{422,0s}{13,0 \cdot (211,0s + 15)s}=0,14
+\end{align}
+\noindent For $T_i$ får vi:\\\\
+$T_i =min(T,4\cdot(\lambda+L))=min(125,40s,4\cdot(211,0+15)s)$\\\\
+$T_i=min(422,0\:s,904,0\:s)$\\\\
+
+\noindent $422,0\:s$ er mindre enn $904,0\:s$. Dermed blir $T_i=422,0\:s$. 
+Dette gir en stabil og rolig regulering, egnet for tankprosesser. 
+Tabellen under gir en oversikt over hvordan man skal beregne regulatorparametrene:
+\begin{table}[h!]
+\centering
+\small
+\caption{SIMC-tuning for FOPDT: PI og PID}
+\begin{tabular}{|l|m{2cm}|m{4cm}|m{1cm}|>{\raggedright\arraybackslash}m{4cm}|}
+\hline
+\textbf{Regulator} & \(\mathbf{K_p}\) & \(\mathbf{T_i}\) & \(\mathbf{T_d}\) & \textbf{Kommentar} \\
+\hline
+PI (offisiell SIMC) & 
+\(\displaystyle\frac{T}{k(\lambda+L)}\) & 
+ $T_i = min(T,4\cdot (\lambda+L))$& 
+-- & 
+Standard SIMC for nivå/tank; anbefalt for de fleste FOPDT-prosesser. \\
+\hline
+PID (praktisk FOPDT-variant) & 
+\(\displaystyle \frac{T}{k(\lambda + L/2)}\) & 
+\(T\) & 
+\(L/2\) & 
+Brukes når man ønsker PID selv om prosessen er FOPDT. Mild derivatvirkning for å kompensere dødtid. \\
+\hline
+
+\end{tabular}
+
+\vspace{2mm}
+\footnotesize
+\textbf{Merk:} Mindre \(\lambda\) gir raskere respons, større \(\lambda\) gir mer robust regulering.
+\end{table}
+\newpage
+\section{Fremgangsmåte for Lambda-tuning} 
+ Vi skal nå utføre en lambda tuning med simulartoren vi har.  Denne har følgende skjermbilde:
+ \begin{figure}[h]
+     \centering
+     \includegraphics[width=1\linewidth]{simulator_bilde.png}
+     \caption{Dette er skjermbildet til simuleringsprogrammet vårt.}
+ \end{figure}\\
+ I dette skjermbildet er disse områdene viktige:\\
+ \begin{figure}[h]
+     \centering
+     \includegraphics[width=0.5\linewidth]{sprangendringer.png}
+     \caption{Her kan vi velge om vi vil gjøre en sprangendring i pådraget (manuell sprangendring), eller en sprangendring i set punktet.}
+ \end{figure}
+ \begin{figure}[h]
+     \centering
+     \includegraphics[width=0.75\linewidth]{regulator.png}
+     \caption{Her ser vi hvordan vi setter regulator parametrene ($K_p$,$T_i$ og $T_d$).  Her setter man også set-punkt (SKAL-verdi) og velger enten Manuell eller Auto. Når man har valgt Manuell styres pådraget med skyve-kontrollen til høyre (0-100\%).}
+ \end{figure}
+ \newpage
 \subsection{gjennomføring av sprangrespons}
-Vi må starte med å gjøre en manuell positiv endring i pådraget $\Delta U$ på f.eks. 5--10\%.  Noter denne verdien, og kall den for $\Delta U$.  Dette gjør du på følgende sted på skjermen (styresystemet):\\
+I simuleringsprogrammet er det to typer sprangresons vi kan utgføre. Og det er en manuell endring i pådraget (uten regulator) eller en endring SKAL-verdi (med regulator).   Vi må starte med å gjøre en manuell positiv endring i pådraget $\Delta U$ på f.eks. 5--10\%.  Noter denne verdien, og kall den for $\Delta U$.  Dette gjør du på følgende sted på skjermen (styresystemet):\\
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.3\linewidth]{prosessfag/bilder/sprangendring_manuell.png}
@@ -833,5 +996,4 @@ Det betyr m.a.o. at om vi måler 0,1mA feil (som er en veldig liten feil) så f�
     \caption{Her er de ulike trykkenhetene man kan velge mellom.  For 12 viser displayet noe som ser ut som M, en ukjent enhet for meg.}
     \label{tab:placeholder}
 \end{table}
-
 \end{document}
