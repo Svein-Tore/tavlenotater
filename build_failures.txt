@@ -1,0 +1,10 @@
+
+./prosessfag/kjem_tek/notarer_til_prøve_blanding_og_mek_sep.tex
+./prosessfag/produksjonsfaget/fopdt.tex
+./prosessfag/produksjonsfaget/reguleringsteknikk.tex
+./prosessfag/produksjonsfaget/prosesskjøring.tex
+./prosessfag/produksjonsfaget/utledning _SIMC.tex
+./prosessfag/analysefaget/notater.tex
+./prosessfag/analysefaget/pH-beregninger.tex
+./prosessfag/analysefaget/arbeidsoppgaver kjemisk binding.tex
+./prosessfag/analysefaget/fortynningsloven.tex

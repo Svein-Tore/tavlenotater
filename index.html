@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>PDFs</title>
+  <style>
+    ul { list-style-type: none; }
+    li { margin: 0.3em 0; }
+    .folder::before { content: "📁 "; cursor: pointer; }
+    .file::before { content: "📄 "; }
+  </style>
+</head>
+<body>
+  <h1>PDFs</h1>
+<ul>
+<li class="file"><a href="main.pdf">main.pdf</a></li>
+<li class="folder">prosessfag</li>
+<ul>
+<li class="folder">analysefaget</li>
+<ul>
+<li class="file"><a href="prosessfag/analysefaget/arbeidsoppgaver kjemisk binding.pdf">arbeidsoppgaver kjemisk binding.pdf</a></li>
+<li class="file"><a href="prosessfag/analysefaget/forsøk_natron_og_eddiksyre.pdf">forsøk_natron_og_eddiksyre.pdf</a></li>
+<li class="file"><a href="prosessfag/analysefaget/fortynningsloven.pdf">fortynningsloven.pdf</a></li>
+<li class="file"><a href="prosessfag/analysefaget/innføring i molbegrepet.pdf">innføring i molbegrepet.pdf</a></li>
+<li class="file"><a href="prosessfag/analysefaget/notater.pdf">notater.pdf</a></li>
+<li class="file"><a href="prosessfag/analysefaget/pH-beregninger.pdf">pH-beregninger.pdf</a></li>
+</ul>
+<li class="folder">kjem_tek</li>
+<ul>
+<li class="file"><a href="prosessfag/kjem_tek/arbeidsoppgave_gasslover.pdf">arbeidsoppgave_gasslover.pdf</a></li>
+<li class="file"><a href="prosessfag/kjem_tek/arebeidsoppgave_2_gasslover.pdf">arebeidsoppgave_2_gasslover.pdf</a></li>
+<li class="file"><a href="prosessfag/kjem_tek/notarer_til_prøve_blanding_og_mek_sep.pdf">notarer_til_prøve_blanding_og_mek_sep.pdf</a></li>
+<li class="file"><a href="prosessfag/kjem_tek/notater_gasslover.pdf">notater_gasslover.pdf</a></li>
+</ul>
+<li class="folder">produksjonsfaget</li>
+<ul>
+<li class="file"><a href="prosessfag/produksjonsfaget/Lambda_ny.pdf">Lambda_ny.pdf</a></li>
+<li class="file"><a href="prosessfag/produksjonsfaget/colab_manual.pdf">colab_manual.pdf</a></li>
+<li class="file"><a href="prosessfag/produksjonsfaget/fopdt.pdf">fopdt.pdf</a></li>
+<li class="file"><a href="prosessfag/produksjonsfaget/prosesskjøring.pdf">prosesskjøring.pdf</a></li>
+<li class="file"><a href="prosessfag/produksjonsfaget/reguleringsteknikk.pdf">reguleringsteknikk.pdf</a></li>
+<li class="file"><a href="prosessfag/produksjonsfaget/utledning _SIMC.pdf">utledning _SIMC.pdf</a></li>
+</ul>
+<li class="file"><a href="prosessfag/testing.pdf">testing.pdf</a></li>
+</ul>
+</ul>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const folders = document.querySelectorAll(".folder");
+  folders.forEach(folder => {
+    const sublist = folder.nextElementSibling;
+    if (sublist && sublist.tagName === "UL") {
+      sublist.style.display = "none";
+      folder.addEventListener("click", () => {
+        sublist.style.display = sublist.style.display === "none" ? "block" : "none";
+      });
+    }
+  });
+});
+</script>
+</body></html>
